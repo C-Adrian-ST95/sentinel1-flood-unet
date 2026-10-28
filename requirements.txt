@@ -1,0 +1,6 @@
+# ESTRUCTURA INICIAL: pendiente de completar y fijar versiones al probar
+# el entorno de PC y el entorno Google Colab.
+# No instalar todavía: primero confirmaremos la GPU, CUDA y la versión
+# de PyTorch compatible, para evitar instalar una variante incorrecta.
+# Dependencias previstas: torch, numpy, pandas, rasterio, geopandas,
+# matplotlib, scikit-learn, PyYAML, tqdm.

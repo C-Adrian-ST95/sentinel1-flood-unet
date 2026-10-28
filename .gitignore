@@ -1,0 +1,40 @@
+# Los datos y artefactos pesados quedan fuera del control de versiones.
+/data/*
+!/data/README.md
+/outputs/*
+!/outputs/README.md
+
+# Modelos, imágenes y arreglos grandes fuera de las carpetas anteriores.
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.tif
+*.tiff
+*.npy
+*.npz
+*.parquet
+*.SAFE/
+
+# Python, Jupyter y entornos virtuales.
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Seguridad y archivos locales.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+.DS_Store
+Thumbs.db
+
+# Registro local de entrenamientos.
+wandb/
+mlruns/
+runs/
