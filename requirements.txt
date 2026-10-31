@@ -1,6 +1,44 @@
-# ESTRUCTURA INICIAL: pendiente de completar y fijar versiones al probar
-# el entorno de PC y el entorno Google Colab.
-# No instalar todavía: primero confirmaremos la GPU, CUDA y la versión
-# de PyTorch compatible, para evitar instalar una variante incorrecta.
-# Dependencias previstas: torch, numpy, pandas, rasterio, geopandas,
-# matplotlib, scikit-learn, PyYAML, tqdm.
+# ==========================================================
+# Sentinel-1 Flood Mapping (U-Net) — Pregunta 2, UNI 2026-II
+# Entorno sugerido: Python 3.12, Windows o Google Colab
+# Instalar: python -m pip install -r requirements.txt
+# Nota CUDA: para usar GPU NVIDIA en Windows, instalar
+# primero la compilación de PyTorch adecuada a la tarjeta
+# siguiendo https://pytorch.org/get-started/locally/
+# ==========================================================
+
+# Deep Learning: U-Net creada por el equipo
+# No utilizar segmentation-models-pytorch para la arquitectura.
+torch>=2.6,<3.0
+
+# Datos y cálculo científico
+numpy>=2.0,<2.3
+pandas>=2.2,<3.0
+scipy>=1.14,<2.0
+
+# Imágenes SAR Sentinel-1 (GeoTIFF, reproyección, rasterización)
+rasterio>=1.4,<1.6
+
+# Datos vectoriales del evento de Lima (EMSN038, GeoJSON/GPKG)
+geopandas>=1.0,<1.3
+shapely>=2.0,<2.3
+pyproj>=3.6,<3.9
+pyogrio>=0.10,<0.14
+
+# Descarga directa de Sen1Floods11 desde Google Cloud Storage
+google-cloud-storage>=2.18,<4.0
+
+# Evaluación: IoU, F1, precisión, recall, matriz de confusión
+scikit-learn>=1.5,<2.0
+
+# Gráficos, máscaras y barras de progreso
+matplotlib>=3.9,<4.0
+Pillow>=10.4,<13.0
+tqdm>=4.66,<5.0
+
+# Configuración de experimentos y seguimiento del entrenamiento
+PyYAML>=6.0,<7.0
+tensorboard>=2.17,<3.0
+
+# Cuadernos Jupyter en VS Code; Colab ya tiene su propio entorno
+ipykernel>=6.29,<8.0

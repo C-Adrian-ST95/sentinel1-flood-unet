@@ -1,20 +1,63 @@
-# Los datos y artefactos pesados quedan fuera del control de versiones.
-/data/*
+# ==========================================================
+# Sentinel-1 + U-Net: codigo, informe y evidencia seleccionada
+# ==========================================================
+
+# DATOS: excluir imagenes, descargas y productos generados.
+# Abrir los directorios permite conservar .gitkeep y documentacion.
+/data/**
+!/data/**/
+!/data/**/.gitkeep
+!/data/**/README.md
 !/data/README.md
-/outputs/*
+
+# Conservar las particiones oficiales y los metadatos del evento:
+# son archivos pequenos necesarios para entender/repetir el protocolo.
+!/data/raw/sen1floods11/splits/flood_handlabeled/flood_train_data.csv
+!/data/raw/sen1floods11/splits/flood_handlabeled/flood_valid_data.csv
+!/data/raw/sen1floods11/splits/flood_handlabeled/flood_test_data.csv
+!/data/raw/sen1floods11/splits/flood_handlabeled/flood_bolivia_data.csv
+!/data/raw/sen1floods11/Sen1Floods11_Metadata.geojson
+
+# OUTPUTS: los pesos, mapas y pruebas permanecen localmente.
+/outputs/**
+!/outputs/**/
+!/outputs/**/.gitkeep
 !/outputs/README.md
 
-# Modelos, imágenes y arreglos grandes fuera de las carpetas anteriores.
+# Publicar solo JSON/CSV de las ejecuciones utilizadas en el informe.
+# Las figuras finales y el PDF se conservan en reports/, no se ignoran.
+!/outputs/experimentos_gold/run_20261029_013146_547224/**/*.json
+!/outputs/experimentos_gold/run_20261029_013146_547224/**/*.csv
+!/outputs/experimentos_weak/run_20261029_035455_467350/**/*.json
+!/outputs/experimentos_weak/run_20261029_035455_467350/**/*.csv
+!/outputs/lima_2017/run_20261031_170636_860270/**/*.json
+!/outputs/lima_2017/run_20261031_170636_860270/**/*.csv
+!/outputs/pipeline/run_20261031_170636_860270/**/*.json
+!/outputs/pipeline/run_20261031_170636_860270/**/*.csv
+
+# MODELOS Y RASTERS: excluir aunque se copien fuera de data/outputs.
 *.pth
 *.pt
 *.ckpt
 *.onnx
 *.tif
 *.tiff
+*.img
+*.hdr
+*.dim
+*.data/
+*.gdb/
 *.npy
 *.npz
 *.parquet
 *.SAFE/
+
+# Paquetes temporales de revision: duplican datos/codigo locales.
+/revision_sentinel1_*/
+/revision_sentinel1_*.zip
+/PAQUETE_PARA_INFORME_UNET.zip
+/Cierre_Sentinel1_UNet.zip
+/Actualizacion_Ejecucion_Un_Comando.zip
 
 # Python, Jupyter y entornos virtuales.
 __pycache__/
@@ -24,6 +67,19 @@ __pycache__/
 venv/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Archivos auxiliares de LaTeX; los PDF, TEX, BIB y STY se conservan.
+*.aux
+*.log
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lof
+*.lot
 
 # Seguridad y archivos locales.
 .env
@@ -31,6 +87,9 @@ venv/
 !.env.example
 *.key
 *.pem
+kaggle.json
+credentials.json
+service-account*.json
 .DS_Store
 Thumbs.db
 
@@ -38,3 +97,4 @@ Thumbs.db
 wandb/
 mlruns/
 runs/
+events.out.tfevents.*

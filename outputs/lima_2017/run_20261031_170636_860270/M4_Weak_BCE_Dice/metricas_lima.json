@@ -1,0 +1,20 @@
+{
+  "modelo": "M4_Weak_BCE_Dice",
+  "checkpoint": "D:\\maestria\\sentinel1-flood-unet\\outputs\\experimentos_weak\\run_20261029_035455_467350\\M4_Weak_BCE_Dice\\best.pt",
+  "segundos_inferencia": 2.09,
+  "ventanas": 80,
+  "pixeles_SAR_validos": 9960850,
+  "pixeles_agua_predicha": 26610,
+  "referencia": "Sin referencia",
+  "evaluacion_cuantitativa": false,
+  "iou_global": null,
+  "iou_media_chips": null,
+  "f1_agua": null,
+  "precision_agua": null,
+  "recall_agua": null,
+  "tp": null,
+  "fp": null,
+  "tn": null,
+  "fn": null,
+  "pixeles_evaluados": null
+}

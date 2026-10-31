@@ -1,0 +1,170 @@
+[
+  {
+    "epoch": 1,
+    "train": {
+      "loss": 0.24103193807453951
+    },
+    "valid": {
+      "loss": 0.18534678862249693,
+      "iou_global": 0.45989584122169114,
+      "iou_media_chips": 0.21917014339513527,
+      "f1_agua": 0.6300392510699043,
+      "precision_agua": 0.9302478861404339,
+      "recall_agua": 0.4763213257762842,
+      "tp": 1062771,
+      "fp": 79689,
+      "tn": 17963259,
+      "fn": 1168435,
+      "chips": 89,
+      "chips_iou_definido": 80,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 248.08,
+    "tiempo_valid_s": 10.79,
+    "tiempo_epoca_s": 258.87
+  },
+  {
+    "epoch": 2,
+    "train": {
+      "loss": 0.15120487333238558
+    },
+    "valid": {
+      "loss": 0.1513554197735858,
+      "iou_global": 0.58059487257854,
+      "iou_media_chips": 0.30810308649377854,
+      "f1_agua": 0.7346536201669099,
+      "precision_agua": 0.8168272439734835,
+      "recall_agua": 0.6675022386996091,
+      "tp": 1489335,
+      "fp": 333982,
+      "tn": 17708966,
+      "fn": 741871,
+      "chips": 89,
+      "chips_iou_definido": 83,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 250.89,
+    "tiempo_valid_s": 11.72,
+    "tiempo_epoca_s": 262.62
+  },
+  {
+    "epoch": 3,
+    "train": {
+      "loss": 0.12850775419752497
+    },
+    "valid": {
+      "loss": 0.1428622509517938,
+      "iou_global": 0.5772329506821511,
+      "iou_media_chips": 0.3030135253372091,
+      "f1_agua": 0.7319564943561427,
+      "precision_agua": 0.8582264730562602,
+      "recall_agua": 0.6380768965303966,
+      "tp": 1423681,
+      "fp": 235183,
+      "tn": 17807765,
+      "fn": 807525,
+      "chips": 89,
+      "chips_iou_definido": 83,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 252.6,
+    "tiempo_valid_s": 10.38,
+    "tiempo_epoca_s": 262.98
+  },
+  {
+    "epoch": 4,
+    "train": {
+      "loss": 0.11944539249862508
+    },
+    "valid": {
+      "loss": 0.15074467766803495,
+      "iou_global": 0.5463664753580588,
+      "iou_media_chips": 0.2853502623349722,
+      "f1_agua": 0.706645525578338,
+      "precision_agua": 0.9061037340994175,
+      "recall_agua": 0.5791571912230427,
+      "tp": 1292219,
+      "fp": 133908,
+      "tn": 17909040,
+      "fn": 938987,
+      "chips": 89,
+      "chips_iou_definido": 83,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 251.61,
+    "tiempo_valid_s": 10.56,
+    "tiempo_epoca_s": 262.17
+  },
+  {
+    "epoch": 5,
+    "train": {
+      "loss": 0.11895729273189426
+    },
+    "valid": {
+      "loss": 0.14089538929000886,
+      "iou_global": 0.5704098045343182,
+      "iou_media_chips": 0.3069295963556259,
+      "f1_agua": 0.7264470750085069,
+      "precision_agua": 0.8703572409676025,
+      "recall_agua": 0.6233745337723187,
+      "tp": 1390877,
+      "fp": 207176,
+      "tn": 17835772,
+      "fn": 840329,
+      "chips": 89,
+      "chips_iou_definido": 82,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 251.84,
+    "tiempo_valid_s": 10.31,
+    "tiempo_epoca_s": 262.15
+  },
+  {
+    "epoch": 6,
+    "train": {
+      "loss": 0.12316041529404378
+    },
+    "valid": {
+      "loss": 0.14073302798665221,
+      "iou_global": 0.5533046460028239,
+      "iou_media_chips": 0.2801498385257222,
+      "f1_agua": 0.7124225726442822,
+      "precision_agua": 0.898663765508524,
+      "recall_agua": 0.5901239060848706,
+      "tp": 1316688,
+      "fp": 148474,
+      "tn": 17894474,
+      "fn": 914518,
+      "chips": 89,
+      "chips_iou_definido": 82,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 250.55,
+    "tiempo_valid_s": 10.28,
+    "tiempo_epoca_s": 260.83
+  },
+  {
+    "epoch": 7,
+    "train": {
+      "loss": 0.11786517792546693
+    },
+    "valid": {
+      "loss": 0.14584126730432423,
+      "iou_global": 0.5599960045693506,
+      "iou_media_chips": 0.29232198980493374,
+      "f1_agua": 0.7179454343845476,
+      "precision_agua": 0.9096016416940798,
+      "recall_agua": 0.5929985846219489,
+      "tp": 1323102,
+      "fp": 131493,
+      "tn": 17911455,
+      "fn": 908104,
+      "chips": 89,
+      "chips_iou_definido": 81,
+      "pixeles_validos": 20274154
+    },
+    "tiempo_train_s": 251.21,
+    "tiempo_valid_s": 10.42,
+    "tiempo_epoca_s": 261.64
+  }
+]

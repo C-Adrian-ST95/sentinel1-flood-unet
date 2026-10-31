@@ -1,0 +1,17 @@
+{
+  "root": "data\\raw\\sen1floods11",
+  "output_dir": "outputs\\experimentos_weak",
+  "epochs": 12,
+  "batch_size": 4,
+  "crop_size": 512,
+  "weak_limit": 2048,
+  "gold_limit": 0,
+  "lr": 0.0003,
+  "seed": 42,
+  "base": 16,
+  "num_workers": 2,
+  "patience": 5,
+  "amp": true,
+  "allow_cpu": false,
+  "no_eval": false
+}

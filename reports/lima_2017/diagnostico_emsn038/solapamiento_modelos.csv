@@ -1,0 +1,5 @@
+﻿modelo,pixeles_agua_predicha_total,pixeles_agua_predicha_en_potencial,fraccion_predicha_en_zona_potencial,fraccion_zona_potencial_marcada_como_agua,pixeles_agua_predicha_en_footprints_postevento,nota,predichos_dentro_de_fuente_maximun height,predichos_dentro_de_fuente_river
+M1_BCE,822977,911,0.0011069568165331474,0.006864540241577563,763155,"SOLAPAMIENTO ESPACIAL DESCRIPTIVO; no IoU, precision, recall ni F1",0,911
+M2_BCE_Dice,20095,182,0.009056979348096541,0.001371401014233937,19120,"SOLAPAMIENTO ESPACIAL DESCRIPTIVO; no IoU, precision, recall ni F1",21,161
+M3_Weak_BCE,78291,29,0.00037041294657112566,0.00021851994182848445,73186,"SOLAPAMIENTO ESPACIAL DESCRIPTIVO; no IoU, precision, recall ni F1",0,29
+M4_Weak_BCE_Dice,26610,83,0.0031191281473130403,0.0006254191438539383,23882,"SOLAPAMIENTO ESPACIAL DESCRIPTIVO; no IoU, precision, recall ni F1",8,75

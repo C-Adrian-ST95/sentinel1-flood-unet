@@ -1,0 +1,13 @@
+{
+  "root": "data\\raw\\sen1floods11",
+  "epochs": 15,
+  "batch_size": 4,
+  "crop_size": 512,
+  "lr": 0.001,
+  "seed": 42,
+  "base": 16,
+  "train": "split oficial completo",
+  "valid": "split oficial completo",
+  "test": "reservado",
+  "bolivia": "reservado"
+}

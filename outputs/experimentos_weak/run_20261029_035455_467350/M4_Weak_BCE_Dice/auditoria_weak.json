@@ -1,0 +1,12 @@
+{
+  "archivos_S1Weak": 4384,
+  "pares_debiles_admisibles": 3993,
+  "pares_usados": 2048,
+  "exclusiones": {
+    "bolivia": 224,
+    "solapamiento_holdout": 167
+  },
+  "criterio": "Excluir Bolivia y bbox que intersecta valid/test/Bolivia",
+  "fuente_etiqueta": "S1OtsuLabelWeak",
+  "advertencia": "El filtrado espacial no garantiza independencia entre eventos cercanos"
+}

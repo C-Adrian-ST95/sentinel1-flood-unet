@@ -1,0 +1,20 @@
+Proyecto U-Net para Sen1Floods11 — scripts separados
+
+1) Copia la carpeta src a la raíz de tu proyecto (junto a raw, notebooks y outputs).
+2) Desde una terminal abierta en la RAÍZ de tu proyecto:
+   python -m pip install -r requirements.txt
+   python -m src.train --root raw/sen1floods11 --epochs 3 --limit-train 40 --limit-valid 10
+   python -m src.test --root raw/sen1floods11 --split valid --limit 10
+3) Para la prueba final del conjunto de prueba (usarlo UNA VEZ al terminar):
+   python -m src.test --root raw/sen1floods11 --split test --limit 0
+
+Si en tu ordenador la ruta real es data/raw/sen1floods11, utiliza
+--root data/raw/sen1floods11 en lugar de --root raw/sen1floods11.
+
+Archivos creados al entrenar y evaluar:
+ outputs/unet_prueba_best.pt
+ outputs/unet_prueba_best.history.json
+ outputs/metricas_valid.json
+ outputs/prediccion_valid.png
+
+Esta fase NO usa etiquetas débiles ni datos de Lima. Se abordarán después.

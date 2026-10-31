@@ -1,0 +1,14 @@
+{
+  "iou_global": 0.6347331755366981,
+  "iou_media_chips": 0.35541809745788494,
+  "f1_agua": 0.7765587498134786,
+  "precision_agua": 0.906035238261044,
+  "recall_agua": 0.6794607668493763,
+  "tp": 307049,
+  "fp": 31844,
+  "tn": 2340689,
+  "fn": 144852,
+  "chips": 15,
+  "chips_iou_definido": 15,
+  "pixeles_validos": 2824434
+}

@@ -1,0 +1,2442 @@
+# CODIGO FUENTE DEL PROYECTO (sin notebooks ni archivos binarios)
+
+
+========================================================================
+ARCHIVO: .gitignore
+========================================================================
+# Los datos y artefactos pesados quedan fuera del control de versiones.
+/data/*
+!/data/README.md
+/outputs/*
+!/outputs/README.md
+
+# Modelos, imágenes y arreglos grandes fuera de las carpetas anteriores.
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.tif
+*.tiff
+*.npy
+*.npz
+*.parquet
+*.SAFE/
+
+# Python, Jupyter y entornos virtuales.
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Seguridad y archivos locales.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+.DS_Store
+Thumbs.db
+
+# Registro local de entrenamientos.
+wandb/
+mlruns/
+runs/
+
+
+
+========================================================================
+ARCHIVO: README.md
+========================================================================
+# Mapeo de inundaciones con Sentinel-1 y U-Net
+
+**Examen parcial 2026-II — Pregunta 2**  
+**Estado:** estructura inicial del proyecto; todavía no incluye entrenamiento ni código de inferencia.
+
+## Objetivo
+
+Implementar una U-Net **propia en PyTorch** para segmentación de agua a partir de imágenes SAR Sentinel-1 con bandas VV y VH. Comparar etiquetas doradas y débiles y evaluar la generalización en Lima (marzo de 2017) con referencia Copernicus EMSN038, o justificar Bolivia como respaldo si Lima no es viable.
+
+## Estructura mínima
+
+```text
+sentinel1-flood-unet/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── configs/
+│   └── experimentos.md
+├── notebooks/
+│   └── .gitkeep
+├── src/
+│   └── .gitkeep
+├── data/
+│   └── README.md
+├── outputs/
+│   └── README.md
+└── reports/
+    └── .gitkeep
+```
+
+El archivo `.gitkeep` únicamente conserva una carpeta vacía en Git; puede retirarse cuando se añadan archivos reales.
+
+## Qué va en cada lugar
+
+- `configs/`: registro de decisiones comunes y los cuatro experimentos M1–M4. Más adelante contendrá las configuraciones que leerá el entrenamiento.
+- `notebooks/`: notebook de exploración y, si hace falta, notebook de inspección de Lima. En Colab se pueden abrir desde GitHub.
+- `src/`: implementación original de dataset, U-Net, entrenamiento, evaluación y herramientas geográficas; no se han creado scripts vacíos innecesarios.
+- `data/`: caché y datos de trabajo locales **excluidos de GitHub**; consultar `data/README.md`.
+- `outputs/`: checkpoints y resultados pesados **excluidos de GitHub**; consultar `outputs/README.md`.
+- `reports/`: informe en formato NeurIPS y figuras pequeñas seleccionadas para el informe.
+
+## Datos externos (no descargar todo de entrada)
+
+- Sen1Floods11: https://github.com/cloudtostreet/Sen1Floods11
+- Carpeta del bucket: `gs://sen1floods11/v1.1/`
+- Sentinel-1 GRD de Lima: https://search.asf.alaska.edu/ o https://browser.dataspace.copernicus.eu/
+- Cartografía EMSN038: https://mapping.emergency.copernicus.eu/activations/EMSN038/
+
+La preparación debe verificar valores `-1` (ignorar), `0` (no agua), `1` (agua), el orden de VV/VH y la alineación geográfica de Lima. No se deben tratar automáticamente las delineaciones de inundación EMS como equivalentes a etiquetas de agua/no agua.
+
+## Uso desde PC y Google Colab
+
+1. Mantener **una sola versión** del código en GitHub.
+2. En PC y en Colab obtener la **misma revisión** del repositorio (mismo commit cuando se comparen experimentos).
+3. Obtener los datos desde su fuente oficial hacia el almacenamiento de trabajo de cada entorno, sin subirlos a GitHub.
+4. Ejecutar cada experimento con su configuración fija; registrar entorno, versión de PyTorch, semilla, particiones y preprocesamiento.
+5. Guardar checkpoints y métricas en `outputs/`, con copia persistente en disco local o Drive. Las máquinas virtuales de Colab son temporales.
+6. Evaluar todos los modelos con la misma lógica de métricas y las mismas particiones.
+
+> **Pendiente:** el requisito final del examen es ejecutar todo el proyecto con un único comando documentado en este README, y fijar el entorno en `requirements.txt` o `environment.yml`. En esta etapa se entrega solo la estructura; el comando se incorporará cuando exista el pipeline.
+
+## Entregables al completar el desarrollo
+
+- U-Net original con entradas VV y VH.
+- Estudio de ablación: etiquetas doradas vs. doradas + débiles, BCE vs. BCE + Dice (o diseño arquitectónico).
+- IoU, F1, precisión, recall y matriz de confusión en evaluación interna.
+- Prueba geográfica en Lima sin entrenamiento peruano, brecha de rendimiento y al menos dos hipótesis de su causa (o Bolivia con justificación).
+- Tres ejemplos visuales de fallos típicos SAR.
+- Informe PDF de 6–10 páginas, formato NeurIPS, mínimo cinco referencias.
+- Repositorio reproducible, entorno especificado y un solo comando.
+
+**Fecha de entrega indicada en el examen:** 31 de octubre de 2026.
+
+
+
+========================================================================
+ARCHIVO: requirements.txt
+========================================================================
+# ==========================================================
+# Sentinel-1 Flood Mapping (U-Net) — Pregunta 2, UNI 2026-II
+# Entorno sugerido: Python 3.12, Windows o Google Colab
+# Instalar: python -m pip install -r requirements.txt
+# Nota CUDA: para usar GPU NVIDIA en Windows, instalar
+# primero la compilación de PyTorch adecuada a la tarjeta
+# siguiendo https://pytorch.org/get-started/locally/
+# ==========================================================
+
+# Deep Learning: U-Net creada por el equipo
+# No utilizar segmentation-models-pytorch para la arquitectura.
+torch>=2.6,<3.0
+
+# Datos y cálculo científico
+numpy>=2.0,<2.3
+pandas>=2.2,<3.0
+scipy>=1.14,<2.0
+
+# Imágenes SAR Sentinel-1 (GeoTIFF, reproyección, rasterización)
+rasterio>=1.4,<1.6
+
+# Datos vectoriales del evento de Lima (EMSN038, GeoJSON/GPKG)
+geopandas>=1.0,<1.3
+shapely>=2.0,<2.3
+pyproj>=3.6,<3.9
+pyogrio>=0.10,<0.14
+
+# Descarga directa de Sen1Floods11 desde Google Cloud Storage
+google-cloud-storage>=2.18,<4.0
+
+# Evaluación: IoU, F1, precisión, recall, matriz de confusión
+scikit-learn>=1.5,<2.0
+
+# Gráficos, máscaras y barras de progreso
+matplotlib>=3.9,<4.0
+Pillow>=10.4,<13.0
+tqdm>=4.66,<5.0
+
+# Configuración de experimentos y seguimiento del entrenamiento
+PyYAML>=6.0,<7.0
+tensorboard>=2.17,<3.0
+
+# Cuadernos Jupyter en VS Code; Colab ya tiene su propio entorno
+ipykernel>=6.29,<8.0
+
+
+========================================================================
+ARCHIVO: src/__init__.py
+========================================================================
+"""Proyecto de segmentación de inundaciones SAR con U-Net original."""
+
+
+
+========================================================================
+ARCHIVO: src/COMO_EJECUTAR.txt
+========================================================================
+Proyecto U-Net para Sen1Floods11 — scripts separados
+
+1) Copia la carpeta src a la raíz de tu proyecto (junto a raw, notebooks y outputs).
+2) Desde una terminal abierta en la RAÍZ de tu proyecto:
+   python -m pip install -r requirements.txt
+   python -m src.train --root raw/sen1floods11 --epochs 3 --limit-train 40 --limit-valid 10
+   python -m src.test --root raw/sen1floods11 --split valid --limit 10
+3) Para la prueba final del conjunto de prueba (usarlo UNA VEZ al terminar):
+   python -m src.test --root raw/sen1floods11 --split test --limit 0
+
+Si en tu ordenador la ruta real es data/raw/sen1floods11, utiliza
+--root data/raw/sen1floods11 en lugar de --root raw/sen1floods11.
+
+Archivos creados al entrenar y evaluar:
+ outputs/unet_prueba_best.pt
+ outputs/unet_prueba_best.history.json
+ outputs/metricas_valid.json
+ outputs/prediccion_valid.png
+
+Esta fase NO usa etiquetas débiles ni datos de Lima. Se abordarán después.
+
+
+
+========================================================================
+ARCHIVO: src/compare_bolivia_actualizado.py
+========================================================================
+"""Compara modelos U-Net ya entrenados contra test (90) y Bolivia (15).
+
+Reconoce automáticamente ejecuciones gold M1/M2 y weak M3/M4.
+
+Ejemplos (desde la raiz del proyecto):
+    python -m src.compare_bolivia --root data/raw/sen1floods11 \
+        --run outputs/experimentos_gold/run_20261029_013146_547224
+    python -m src.compare_bolivia --root data/raw/sen1floods11 \
+        --run outputs/experimentos_weak/run_20261029_035455_467350
+
+No vuelve a entrenar ni modifica los checkpoints.
+"""
+import argparse
+import csv
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+
+GRUPOS = {
+    'gold': ('M1_BCE', 'M2_BCE_Dice'),
+    'weak': ('M3_Weak_BCE', 'M4_Weak_BCE_Dice'),
+}
+
+
+def detectar_modelos(run: Path, parser: argparse.ArgumentParser, grupo: str):
+    if not run.is_dir():
+        parser.error(f'No existe la carpeta de ejecucion: {run}')
+
+    if grupo != 'auto':
+        nombres = GRUPOS[grupo]
+    else:
+        grupos_completos = [nombres for nombres in GRUPOS.values()
+                            if all((run / nombre / 'best.pt').is_file() for nombre in nombres)]
+        if len(grupos_completos) == 1:
+            nombres = grupos_completos[0]
+        elif len(grupos_completos) > 1:
+            parser.error('La carpeta contiene ambos grupos. Usa --grupo gold o --grupo weak.')
+        else:
+            encontrados = [str(p.relative_to(run)) for p in run.glob('*/best.pt')]
+            parser.error('No se encontro un par completo de checkpoints M1/M2 o M3/M4.\n'
+                         f'Checkpoints encontrados: {encontrados or "ninguno"}.\n'
+                         'Comprueba que el entrenamiento terminara y exista best.pt en cada modelo.')
+
+    for nombre in nombres:
+        checkpoint = run / nombre / 'best.pt'
+        if not checkpoint.is_file():
+            parser.error(f'No se encuentra: {checkpoint}')
+    return nombres
+
+
+def main():
+    p = argparse.ArgumentParser(description='Evaluacion geografica test vs Bolivia para M1/M2 o M3/M4')
+    p.add_argument('--run', type=Path, required=True, help='Carpeta run_... con subcarpetas de modelos')
+    p.add_argument('--root', type=Path, default=Path('data/raw/sen1floods11'))
+    p.add_argument('--crop-size', type=int, default=512)
+    p.add_argument('--batch-size', type=int, default=1)
+    p.add_argument('--grupo', choices=['auto', 'gold', 'weak'], default='auto')
+    args = p.parse_args()
+
+    nombres = detectar_modelos(args.run, p, args.grupo)
+    print('Modelos detectados:', ', '.join(nombres), flush=True)
+    rows = []
+
+    for nombre in nombres:
+        checkpoint = args.run / nombre / 'best.pt'
+        resultados = {}
+        for split in ('test', 'bolivia'):
+            out = args.run / nombre / split
+            command = [
+                sys.executable, '-m', 'src.test',
+                '--root', str(args.root),
+                '--checkpoint', str(checkpoint),
+                '--split', split,
+                '--limit', '0',
+                '--crop-size', str(args.crop_size),
+                '--batch-size', str(args.batch_size),
+                '--output-dir', str(out),
+            ]
+            print(f'\nEVALUANDO {nombre} | {split.upper()}', flush=True)
+            subprocess.run(command, check=True)
+            metrics_path = out / f'metricas_{split}.json'
+            resultados[split] = json.loads(metrics_path.read_text(encoding='utf-8'))
+
+        test = resultados['test']
+        bolivia = resultados['bolivia']
+        rows.append({
+            'modelo': nombre,
+            'iou_test': test['iou_global'],
+            'iou_bolivia': bolivia['iou_global'],
+            'brecha_iou_test_menos_bolivia': test['iou_global'] - bolivia['iou_global'],
+            'f1_test': test['f1_agua'],
+            'f1_bolivia': bolivia['f1_agua'],
+            'precision_bolivia': bolivia['precision_agua'],
+            'recall_bolivia': bolivia['recall_agua'],
+            'chips_test': test['chips'],
+            'chips_bolivia': bolivia['chips'],
+        })
+
+    path = args.run / 'comparacion_geografica.csv'
+    with path.open('w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+    width = 0.36
+    xs = list(range(len(rows)))
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar([x - width / 2 for x in xs], [r['iou_test'] for r in rows], width,
+           label='Test interno (90)')
+    ax.bar([x + width / 2 for x in xs], [r['iou_bolivia'] for r in rows], width,
+           label='Bolivia (15)')
+    ax.set_xticks(xs, [r['modelo'] for r in rows])
+    ax.set_ylabel('IoU global (agua)')
+    ax.set_ylim(0, 1)
+    ax.set_title('Generalizacion geografica: Test vs Bolivia')
+    ax.legend()
+    ax.grid(axis='y', alpha=0.2)
+    fig.tight_layout()
+    figure = args.run / 'comparacion_geografica.png'
+    fig.savefig(figure, dpi=150)
+    plt.close(fig)
+
+    print('\nRESULTADOS DE GENERALIZACION:')
+    for row in rows:
+        print(f"  {row['modelo']}: IoU test={row['iou_test']:.4f} | "
+              f"IoU Bolivia={row['iou_bolivia']:.4f} | "
+              f"Brecha test-Bolivia={row['brecha_iou_test_menos_bolivia']:+.4f}")
+    print('Guardados:', path, 'y', figure)
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/compare_bolivia.py
+========================================================================
+"""Evaluar checkpoints M1/M2 ya entrenados sobre test y Bolivia, sin reentrenar.
+
+Ejemplo:
+python -m src.compare_bolivia --run outputs/experimentos_gold/run_20261029_005856_233967
+"""
+import argparse
+import csv
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--run", type=Path, required=True)
+    p.add_argument("--root", type=Path, default=Path("data/raw/sen1floods11"))
+    p.add_argument("--crop-size", type=int, default=512)
+    p.add_argument("--batch-size", type=int, default=1)
+    args = p.parse_args()
+
+    rows = []
+    for nombre in ("M1_BCE", "M2_BCE_Dice"):
+        checkpoint = args.run / nombre / "best.pt"
+        if not checkpoint.is_file():
+            p.error(f"No se encuentra: {checkpoint}")
+        resultados = {}
+        for split in ("test", "bolivia"):
+            out = args.run / nombre / split
+            command = [
+                sys.executable, "-m", "src.test", "--root", str(args.root),
+                "--checkpoint", str(checkpoint), "--split", split,
+                "--limit", "0", "--crop-size", str(args.crop_size),
+                "--batch-size", str(args.batch_size), "--output-dir", str(out),
+            ]
+            print(f"\nEVALUANDO {nombre} | {split.upper()}", flush=True)
+            subprocess.run(command, check=True)
+            resultados[split] = json.loads((out / f"metricas_{split}.json").read_text(encoding="utf-8"))
+
+        test = resultados["test"]
+        bolivia = resultados["bolivia"]
+        rows.append({
+            "modelo": nombre,
+            "iou_test": test["iou_global"],
+            "iou_bolivia": bolivia["iou_global"],
+            "brecha_iou_test_menos_bolivia": test["iou_global"] - bolivia["iou_global"],
+            "f1_test": test["f1_agua"],
+            "f1_bolivia": bolivia["f1_agua"],
+            "precision_bolivia": bolivia["precision_agua"],
+            "recall_bolivia": bolivia["recall_agua"],
+            "chips_test": test["chips"],
+            "chips_bolivia": bolivia["chips"],
+        })
+
+    path = args.run / "comparacion_geografica.csv"
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+    xs = range(len(rows))
+    width = 0.36
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar([x - width / 2 for x in xs], [r["iou_test"] for r in rows], width, label="Test interno (90)")
+    ax.bar([x + width / 2 for x in xs], [r["iou_bolivia"] for r in rows], width, label="Bolivia (15)")
+    ax.set_xticks(list(xs), [r["modelo"] for r in rows])
+    ax.set_ylabel("IoU global (agua)")
+    ax.set_ylim(0, 1)
+    ax.set_title("Generalización geográfica: Test vs Bolivia")
+    ax.legend()
+    ax.grid(axis="y", alpha=0.2)
+    fig.tight_layout()
+    figure = args.run / "comparacion_geografica.png"
+    fig.savefig(figure, dpi=150)
+    plt.close(fig)
+
+    print("\nRESULTADOS DE GENERALIZACIÓN:")
+    for r in rows:
+        print(f"  {r['modelo']}: IoU test={r['iou_test']:.4f} | "
+              f"IoU Bolivia={r['iou_bolivia']:.4f} | "
+              f"Brecha test-Bolivia={r['brecha_iou_test_menos_bolivia']:+.4f}")
+    print("Guardados:", path, "y", figure)
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/comprobacion.py
+========================================================================
+
+@'
+import pyogrio
+from pathlib import Path
+
+# Ruta de la geodatabase de Lima 2017
+ruta = Path(
+    "data/raw/lima_2017/emsn038/EMSN038_UTM18S_v0.gdb"
+)
+
+# Capas que necesitamos inspeccionar
+capas = [
+    "Potential_Maximum_flood",
+    "Riverbank",
+    "EMSN038_AOI",
+    "Footprints",
+    "grid200",
+]
+
+for nombre in capas:
+    print(f"\n{'=' * 55}")
+    print(f"CAPA: {nombre}")
+    print("=" * 55)
+
+    info = pyogrio.read_info(ruta, layer=nombre)
+
+    print("Geometría:", info["geometry_type"])
+    print("CRS:", info["crs"])
+    print("Número de elementos:", info["features"])
+    print("Extensión geográfica:", info["total_bounds"])
+    print("Campos:", list(info["fields"]))
+
+    # Mostrar registros de ejemplo de las dos capas principales
+    if nombre in ["Potential_Maximum_flood", "Riverbank"]:
+        datos = pyogrio.read_dataframe(
+            ruta,
+            layer=nombre,
+            max_features=3
+        )
+
+        print("\nPrimeros registros:")
+        print(
+            datos.drop(columns="geometry")
+            .iloc[:, :12]
+            .to_string(index=False)
+        )
+
+print("\nINSPECCIÓN COMPLETADA")
+'@ | python -
+
+
+@'
+from pathlib import Path
+import pyogrio
+from shapely import union_all
+
+# Ruta original de la geodatabase
+ruta = Path(
+    "data/raw/lima_2017/emsn038/EMSN038_UTM18S_v0.gdb"
+)
+
+# Leer las dos capas principales
+flood = pyogrio.read_dataframe(
+    ruta, layer="Potential_Maximum_flood"
+)
+
+river = pyogrio.read_dataframe(
+    ruta, layer="Riverbank"
+)
+
+# 1. Analizar los atributos de cada capa
+for nombre, datos in [
+    ("Potential_Maximum_flood", flood),
+    ("Riverbank", river)
+]:
+    print(f"\n{'='*55}")
+    print(f"CAPA: {nombre}")
+    print("="*55)
+
+    print("\nCantidad de polígonos:", len(datos))
+    print("\nValores del campo source:")
+    print(datos["source"].fillna("SIN VALOR").value_counts())
+
+    print("\nÁrea de cada polígono (km²):")
+    for i, geometria in enumerate(datos.geometry):
+        print(f"  Polígono {i+1}: {geometria.area/1e6:.4f}")
+
+    print("\nGeometrías inválidas:",
+          (~datos.geometry.is_valid).sum())
+
+# 2. Comparar la superposición de las capas
+if flood.geometry.is_valid.all() and river.geometry.is_valid.all():
+
+    area_flood = union_all(flood.geometry.values)
+    area_river = union_all(river.geometry.values)
+
+    interseccion = area_flood.intersection(area_river)
+
+    print("\n" + "="*55)
+    print("COMPARACIÓN ESPACIAL")
+    print("="*55)
+
+    print(f"Área única Flood: {area_flood.area/1e6:.4f} km²")
+    print(f"Área única Riverbank: {area_river.area/1e6:.4f} km²")
+    print(f"Superposición: {interseccion.area/1e6:.4f} km²")
+
+else:
+    print("\nHay geometrías inválidas que debemos revisar.")
+
+# 3. Inspeccionar información de coberturas
+footprints = pyogrio.read_dataframe(
+    ruta, layer="Footprints"
+)
+
+print("\n" + "="*55)
+print("FOOTPRINTS")
+print("="*55)
+print(footprints.drop(columns="geometry").to_string(index=False))
+
+print("\nINSPECCIÓN FINALIZADA")
+'@ | python -
+
+
+
+@'
+from pathlib import Path
+import geopandas as gpd
+import pyogrio
+import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
+from shapely import union_all
+
+# 1. Rutas
+ruta = Path(
+    "data/raw/lima_2017/emsn038/EMSN038_UTM18S_v0.gdb"
+)
+
+salida = Path("outputs/figures")
+salida.mkdir(parents=True, exist_ok=True)
+
+# 2. Leer las capas
+flood = pyogrio.read_dataframe(
+    ruta, layer="Potential_Maximum_flood"
+)
+riverbank = pyogrio.read_dataframe(
+    ruta, layer="Riverbank"
+)
+aoi = pyogrio.read_dataframe(
+    ruta, layer="EMSN038_AOI"
+)
+footprints = pyogrio.read_dataframe(
+    ruta, layer="Footprints"
+)
+
+# 3. Separar las categorías de inundación y río
+categoria = flood["source"].fillna("").str.strip().str.lower()
+
+inundacion = flood[categoria == "maximun height"].copy()
+rios = flood[categoria == "river"].copy()
+
+# 4. Seleccionar únicamente la cobertura WorldView-2
+wv = footprints[
+    footprints["SDP"] == "WorldView-2"
+].copy()
+
+# 5. Comprobar duplicidad de geometrías
+geom_inundacion = union_all(inundacion.geometry.values)
+geom_riverbank = union_all(riverbank.geometry.values)
+geom_aoi = union_all(aoi.geometry.values)
+geom_wv = union_all(wv.geometry.values)
+
+diferencia = geom_inundacion.symmetric_difference(
+    geom_riverbank
+).area
+
+# 6. Calcular cobertura óptica válida dentro del AOI
+cobertura_valida = geom_wv.intersection(geom_aoi)
+
+area_aoi = geom_aoi.area / 1e6
+area_cobertura = cobertura_valida.area / 1e6
+
+inundacion_cubierta = geom_inundacion.intersection(
+    cobertura_valida
+).area / 1e6
+
+print("\n========== RESULTADOS ==========")
+print(f"Diferencia geométrica: {diferencia:.4f} m²")
+print(f"Área AOI: {area_aoi:.4f} km²")
+print(f"Cobertura WorldView-2 dentro del AOI: {area_cobertura:.4f} km²")
+print(f"Porcentaje de cobertura: {100*area_cobertura/area_aoi:.2f}%")
+print(f"Extensión potencial cubierta por WorldView-2: {inundacion_cubierta:.4f} km²")
+
+if diferencia < 0.01:
+    print("CONFIRMADO: Riverbank y maximun height tienen la misma geometría.")
+else:
+    print("Las capas presentan diferencias geométricas.")
+
+# 7. Generar un mapa general y un acercamiento
+fig, axes = plt.subplots(1, 2, figsize=(16, 7))
+
+for ax in axes:
+    aoi.boundary.plot(ax=ax, color="gray", linewidth=1)
+    wv.plot(
+        ax=ax, color="gold", alpha=0.15,
+        edgecolor="darkorange", linewidth=0.6
+    )
+    rios.plot(ax=ax, color="royalblue", alpha=0.7)
+    inundacion.plot(ax=ax, color="crimson", alpha=0.65)
+
+    ax.set_aspect("equal")
+    ax.set_xlabel("Este UTM (m)")
+    ax.set_ylabel("Norte UTM (m)")
+    ax.grid(alpha=0.2)
+
+axes[0].set_title("EMSN038 - Área general de estudio")
+axes[1].set_title("EMSN038 - Zonas de inundación")
+
+# Acercamiento a las zonas de inundación
+xmin, ymin, xmax, ymax = flood.total_bounds
+margen = 1500
+
+axes[1].set_xlim(xmin - margen, xmax + margen)
+axes[1].set_ylim(ymin - margen, ymax + margen)
+
+leyenda = [
+    Line2D([0], [0], color="gray", label="Límite AOI"),
+    Patch(facecolor="gold", alpha=0.3, label="WorldView-2"),
+    Patch(facecolor="royalblue", label="Ríos"),
+    Patch(facecolor="crimson", label="Extensión potencial")
+]
+
+fig.legend(handles=leyenda, loc="lower center", ncol=4)
+plt.tight_layout(rect=[0, 0.07, 1, 1])
+
+archivo = salida / "emsn038_revision_espacial.png"
+plt.savefig(archivo, dpi=200, bbox_inches="tight")
+plt.close()
+
+print(f"\nMapa guardado en: {archivo}")
+print("PROCESO FINALIZADO")
+'@ | python -
+
+
+
+========================================================================
+ARCHIVO: src/dataset.py
+========================================================================
+"""Carga local de Sen1Floods11 v1.1 usando los splits oficiales.
+
+Solo chips dorados para la primera prueba; -1 (NoData) se ignora.
+"""
+import csv
+import random
+from pathlib import Path
+
+import numpy as np
+import rasterio
+from rasterio.windows import Window
+import torch
+from torch.utils.data import Dataset
+
+
+class Sen1Floods11Dataset(Dataset):
+    """Pares VV/VH y máscara manual; lectura por ventana, sin cargar todo a RAM."""
+
+    def __init__(self, root, split="train", limit=None, crop_size=256, seed=42):
+        self.root = Path(root)
+        if split not in {"train", "valid", "test", "bolivia"}:
+            raise ValueError("split debe ser train, valid, test o bolivia")
+        self.split = split
+        self.crop_size = crop_size
+        self.random_crop = split == "train"
+        self.random = random.Random(seed)
+
+        base = self.root / "data/flood_events/HandLabeled"
+        img_dir = base / "S1Hand"
+        mask_dir = base / "LabelHand"
+        csv_path = self.root / "splits/flood_handlabeled" / f"flood_{split}_data.csv"
+        if not csv_path.is_file():
+            raise FileNotFoundError(f"No existe el CSV del split: {csv_path}")
+        if not img_dir.is_dir() or not mask_dir.is_dir():
+            raise FileNotFoundError(f"Falta S1Hand o LabelHand dentro de {base}")
+
+        # CSV oficial: ruta a imagen SAR, ruta a máscara; las rutas pueden ser largas.
+        pairs = []
+        missing = []
+        with csv_path.open("r", encoding="utf-8-sig", newline="") as fh:
+            for row in csv.reader(fh):
+                if len(row) < 2:
+                    continue
+                img_name = row[0].strip().replace("\\", "/").split("/")[-1]
+                mask_name = row[1].strip().replace("\\", "/").split("/")[-1]
+                if not (img_name.endswith("_S1Hand.tif") and mask_name.endswith("_LabelHand.tif")):
+                    # Permite una fila de cabecera, pero no mezcla capas incompatibles.
+                    if "image" in img_name.lower() or "sar" in img_name.lower():
+                        continue
+                    raise ValueError(f"Columnas inesperadas en {csv_path}: {row[:2]}")
+                if img_name.removesuffix("_S1Hand.tif") != mask_name.removesuffix("_LabelHand.tif"):
+                    raise ValueError(f"Chip desparejado: {img_name} / {mask_name}")
+                image = img_dir / img_name
+                mask = mask_dir / mask_name
+                if image.is_file() and mask.is_file():
+                    pairs.append((image, mask))
+                else:
+                    missing.append((str(image), str(mask)))
+        if missing:
+            raise FileNotFoundError(
+                f"Faltan {len(missing)} parejas del CSV {split}. Primera pareja: {missing[0]}"
+            )
+        if not pairs:
+            raise ValueError(f"El CSV {csv_path} no tiene pares utilizables")
+
+        self.random.shuffle(pairs)
+        self.pairs = pairs if limit is None else pairs[:limit]
+        if not self.pairs:
+            raise ValueError("El límite debe ser mayor que cero")
+        print(f"[{split}] {len(self.pairs)} imágenes seleccionadas de {len(pairs)}")
+
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, index):
+        image_path, mask_path = self.pairs[index]
+        with rasterio.open(image_path) as sar, rasterio.open(mask_path) as reference:
+            if sar.count != 2 or reference.count != 1:
+                raise ValueError(f"Bandas inesperadas en {image_path.name}")
+            if (sar.width, sar.height) != (reference.width, reference.height):
+                raise ValueError(f"Dimensiones distintas en {image_path.name}")
+            # También verificamos la georreferenciación para no comparar grillas distintas.
+            if sar.crs != reference.crs or not sar.transform.almost_equals(reference.transform):
+                raise ValueError(f"Grillas geográficas distintas en {image_path.name}")
+
+            size = self.crop_size
+            if size is None:
+                window = None  # Chip entero, normalmente 512 x 512.
+            else:
+                if size > min(sar.height, sar.width) or size <= 0:
+                    raise ValueError(f"crop_size={size} no cabe en {image_path.name}")
+                if self.random_crop:
+                    r = random.randint(0, sar.height - size)
+                    c = random.randint(0, sar.width - size)
+                else:
+                    r = (sar.height - size) // 2
+                    c = (sar.width - size) // 2
+                window = Window(c, r, size, size)
+
+            image = sar.read([1, 2], window=window, masked=True)
+            mask = reference.read(1, window=window, masked=True)
+
+        x = image.astype(np.float32).filled(np.nan)
+        y = mask.filled(-1).astype(np.int16)
+        valid = np.isin(y, [0, 1]) & np.isfinite(x).all(axis=0)
+        valid &= (x > -1000).all(axis=0)  # Descarta valores sentinel extremos.
+
+        # Normalización inicial fija para VV y VH en dB; documentar su rango.
+        x = np.nan_to_num(x, nan=-50.0, neginf=-50.0, posinf=5.0)
+        x = (np.clip(x, -50.0, 5.0) + 50.0) / 55.0
+        x[:, ~valid] = 0.0
+        y = np.where(valid, y, 0).astype(np.float32)[None]
+        valid = valid.astype(np.float32)[None]
+
+        return (torch.from_numpy(x.copy()),
+                torch.from_numpy(y.copy()),
+                torch.from_numpy(valid.copy()))
+
+
+
+========================================================================
+ARCHIVO: src/descargar_sen1floods11.py
+========================================================================
+#!/usr/bin/env python3
+"""
+Descarga selectiva de Sen1Floods11 v1.1 (datos para la Pregunta 2).
+
+Instalar:
+    python -m pip install google-cloud-storage
+
+Uso:
+    python scripts/descargar_sen1floods11.py --dest data/raw/sen1floods11 --dry-run
+    python scripts/descargar_sen1floods11.py --dest data/raw/sen1floods11 --workers 6
+    python scripts/descargar_sen1floods11.py --dest data/raw/sen1floods11 --optical
+
+No realiza entrenamiento. No carga los GeoTIFF completos en la memoria RAM.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+import hashlib
+import json
+import os
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+from urllib.request import urlopen
+
+try:
+    from google.cloud import storage
+except ImportError:
+    sys.exit("Falta una dependencia: instala con 'python -m pip install google-cloud-storage'.")
+
+BUCKET = "sen1floods11"
+VERSION = "v1.1"
+DATA = "data/flood_events"
+
+# Se descargan todas las imágenes SAR y las máscaras para la comparación
+# doradas vs. débiles. S1OtsuLabelHand y S2IndexLabelWeak se incluyen
+# para analizar la calidad de las etiquetas, no son datos extra de entrada.
+GROUPS = {
+    "gold": [
+        f"{DATA}/HandLabeled/S1Hand/",
+        f"{DATA}/HandLabeled/LabelHand/",
+        f"{DATA}/HandLabeled/S1OtsuLabelHand/",
+    ],
+    "weak": [
+        f"{DATA}/WeaklyLabeled/S1Weak/",
+        f"{DATA}/WeaklyLabeled/S1OtsuLabelWeak/",
+        f"{DATA}/WeaklyLabeled/S2IndexLabelWeak/",
+    ],
+    "split": ["splits/flood_handlabeled/"],
+}
+META_URL = (
+    "https://raw.githubusercontent.com/cloudtostreet/Sen1Floods11/"
+    "master/Sen1Floods11_Metadata.geojson"
+)
+
+
+def parse_args():
+    p = argparse.ArgumentParser(description="Sen1Floods11 v1.1: SAR VV/VH, máscaras y splits")
+    p.add_argument("--dest", type=Path, default=Path("data/raw/sen1floods11"),
+                   help="Carpeta destino dentro de tu proyecto (por defecto data/raw/sen1floods11)")
+    p.add_argument("--workers", type=int, default=6, help="Descargas paralelas (recomendado 4-8)")
+    p.add_argument("--mode", choices=("all", "gold", "weak", "split"), default="all",
+                   help="all descarga lo obligatorio; gold y weak permiten hacerlo por etapas")
+    p.add_argument("--optical", action="store_true",
+                   help="Incluye S2Hand, opcional para el bono de fusión con Sentinel-2")
+    p.add_argument("--dry-run", action="store_true", help="Solo lista archivos/tamaños, sin descargarlos")
+    p.add_argument("--verify-md5", action="store_true",
+                   help="Comprueba MD5 cuando el bucket lo proporciona; consume tiempo de disco")
+    return p.parse_args()
+
+
+def local_path(dest: Path, blob_name: str) -> Path:
+    # Conservamos la estructura relativa a v1.1 dentro de data/raw/sen1floods11.
+    prefix = f"{VERSION}/"
+    if not blob_name.startswith(prefix):
+        raise ValueError(f"Objeto fuera del prefijo esperado: {blob_name}")
+    relative = blob_name[len(prefix):]
+    if not relative or ".." in Path(relative).parts:
+        raise ValueError(f"Ruta no segura: {blob_name}")
+    return dest / Path(relative)
+
+
+def md5_matches(path: Path, remote_md5: str | None) -> bool:
+    if not remote_md5:
+        return True
+    digest = hashlib.md5()  # checksum de integridad del archivo; no se usa para seguridad
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(4 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.digest() == base64.b64decode(remote_md5)
+
+
+def download_blob(blob, target: Path, verify_md5: bool) -> str:
+    size = int(blob.size or 0)
+    if target.is_file() and target.stat().st_size == size:
+        if (not verify_md5) or md5_matches(target, blob.md5_hash):
+            return "exists"
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temp = target.with_name(target.name + ".part")
+    last_error = None
+    for attempt in range(1, 4):
+        try:
+            # .part evita dejar un GeoTIFF aparentemente completo si se interrumpe.
+            if temp.exists():
+                temp.unlink()
+            blob.download_to_filename(str(temp), timeout=180, checksum="auto")
+            if temp.stat().st_size != size:
+                raise IOError(f"Tamaño incorrecto: {temp.stat().st_size} vs {size}")
+            if verify_md5 and not md5_matches(temp, blob.md5_hash):
+                raise IOError("Checksum MD5 distinto del origen")
+            os.replace(temp, target)
+            return "downloaded"
+        except Exception as exc:
+            last_error = exc
+            if attempt < 3:
+                time.sleep(2 * attempt)
+    if temp.exists():
+        temp.unlink()
+    raise RuntimeError(f"No se descargó {blob.name}: {last_error}")
+
+
+def download_metadata(dest: Path) -> str:
+    dst = dest / "Sen1Floods11_Metadata.geojson"
+    if dst.is_file() and dst.stat().st_size > 100:
+        return "exists"
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dst.with_name(dst.name + ".part")
+    try:
+        with urlopen(META_URL, timeout=60) as resp, tmp.open("wb") as fh:
+            while True:
+                chunk = resp.read(1024 * 1024)
+                if not chunk:
+                    break
+                fh.write(chunk)
+        os.replace(tmp, dst)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+    return "downloaded"
+
+
+def check_pair(dest: Path, image_layer: str, mask_layer: str, folder: str) -> None:
+    base = dest / "data" / "flood_events" / folder
+    image_dir, mask_dir = base / image_layer, base / mask_layer
+    if not image_dir.is_dir() or not mask_dir.is_dir():
+        print(f"  No se revisan pares {image_layer}/{mask_layer}: no están ambas carpetas")
+        return
+    # Nombre: EVENT_CHIPID_LAYER.tif. Se conserva el identificador completo.
+    img_ids = {p.name[:-len(f'_{image_layer}.tif')] for p in image_dir.glob(f'*_{image_layer}.tif')}
+    lab_ids = {p.name[:-len(f'_{mask_layer}.tif')] for p in mask_dir.glob(f'*_{mask_layer}.tif')}
+    print(f"  {folder}: {image_layer}={len(img_ids)} | {mask_layer}={len(lab_ids)} | "
+          f"parejas={len(img_ids & lab_ids)} | sin máscara={len(img_ids-lab_ids)} | "
+          f"sin imagen={len(lab_ids-img_ids)}")
+    if img_ids != lab_ids:
+        print("  ATENCIÓN: revisa los archivos faltantes; el emparejamiento no está completo.")
+
+
+def main():
+    a = parse_args()
+    if not 1 <= a.workers <= 16:
+        sys.exit("--workers debe estar entre 1 y 16")
+
+    categories = ["gold", "weak", "split"] if a.mode == "all" else [a.mode]
+    prefixes = [f"{VERSION}/{p}" for cat in categories for p in GROUPS[cat]]
+    if a.optical and a.mode in ("all", "gold"):
+        prefixes.append(f"{VERSION}/{DATA}/HandLabeled/S2Hand/")
+
+    client = storage.Client.create_anonymous_client()
+    bucket = client.bucket(BUCKET)
+    blobs = []
+    print(f"Origen: gs://{BUCKET}/{VERSION}/")
+    print("Consultando objetos del bucket público (todavía sin descargar)...", flush=True)
+    try:
+        for prefix in prefixes:
+            found = [b for b in bucket.list_blobs(prefix=prefix)
+                     if b.name.lower().endswith((".tif", ".tiff", ".csv"))]
+            count_bytes = sum(int(b.size or 0) for b in found)
+            print(f"  {prefix}: {len(found)} archivos; {count_bytes / (1024**3):.3f} GiB")
+            if not found:
+                print("  ADVERTENCIA: prefijo vacío; comprobar acceso o ruta.")
+            blobs.extend(found)
+    except Exception as exc:
+        sys.exit(f"Error al listar bucket: {exc}. Verifica Internet y acceso público al bucket.")
+
+    if not blobs or any(not any(b.name.startswith(p) for b in blobs) for p in prefixes):
+        sys.exit("No se encontraron todos los grupos solicitados. No continuar con una descarga incompleta.")
+
+    # Guardamos inventario local para que se pueda auditar la descarga.
+    a.dest.mkdir(parents=True, exist_ok=True)
+    manifest = [
+        {"name": b.name, "size": int(b.size or 0), "md5_base64": b.md5_hash}
+        for b in blobs
+    ]
+    print(f"TOTAL: {len(blobs)} archivos; {sum(x['size'] for x in manifest) / (1024**3):.2f} GiB")
+    if a.dry_run:
+        print("Modo de prueba: no se ha descargado ningún archivo.")
+        return
+
+    manifest_path = a.dest / "manifest_download.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    downloaded = existing = failures = 0
+    with ThreadPoolExecutor(max_workers=a.workers) as pool:
+        futures = {
+            pool.submit(download_blob, b, local_path(a.dest, b.name), a.verify_md5): b.name
+            for b in blobs
+        }
+        for index, fut in enumerate(as_completed(futures), 1):
+            try:
+                state = fut.result()
+                downloaded += state == "downloaded"
+                existing += state == "exists"
+            except Exception as exc:
+                failures += 1
+                print(f"ERROR: {futures[fut]}: {exc}")
+            if index % 100 == 0 or index == len(futures):
+                print(f"[{index}/{len(futures)}] nuevos={downloaded}; "
+                      f"ya completos={existing}; errores={failures}", flush=True)
+
+    if a.mode in ("all", "gold", "split"):
+        try:
+            print("Metadatos de eventos:", download_metadata(a.dest))
+        except Exception as exc:
+            failures += 1
+            print(f"No se descargaron los metadatos: {exc}")
+
+    print("\nVerificación de parejas por nombre:")
+    if a.mode in ("all", "gold"):
+        check_pair(a.dest, "S1Hand", "LabelHand", "HandLabeled")
+    if a.mode in ("all", "weak"):
+        check_pair(a.dest, "S1Weak", "S1OtsuLabelWeak", "WeaklyLabeled")
+        check_pair(a.dest, "S1Weak", "S2IndexLabelWeak", "WeaklyLabeled")
+
+    if failures:
+        sys.exit(f"Finalizado con {failures} errores. Ejecuta el mismo comando otra vez para reintentar.")
+    print("DESCARGA COMPLETA. Datos guardados en:", a.dest.resolve())
+    print("Recuerda que los datos de Lima 2017 (Sentinel-1 + EMSN038) se obtienen por separado.")
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/metrics_backup.py
+========================================================================
+"""Pérdida y métricas binarias: solo píxeles válidos (sin NoData)."""
+import torch
+from torch.nn import functional as F
+
+
+def masked_bce(logits, labels, valid):
+    loss_per_pixel = F.binary_cross_entropy_with_logits(
+        logits, labels, reduction="none"
+    )
+    return (loss_per_pixel * valid).sum() / valid.sum().clamp_min(1.0)
+
+
+class WaterMetrics:
+    """IoU global + media IoU por chip, F1, precisión, recall y confusión."""
+
+    def __init__(self):
+        self.tp = self.fp = self.tn = self.fn = 0
+        self.chip_ious = []
+        self.n_chips = 0
+        self.n_valid = 0
+
+    @torch.no_grad()
+    def update(self, logits, labels, valid):
+        p = torch.sigmoid(logits) >= 0.5
+        y = labels >= 0.5
+        v = valid > 0.5
+        for i in range(p.shape[0]):
+            pi, yi, vi = p[i], y[i], v[i]
+            tp = int((pi & yi & vi).sum().item())
+            fp = int((pi & ~yi & vi).sum().item())
+            fn = int((~pi & yi & vi).sum().item())
+            tn = int((~pi & ~yi & vi).sum().item())
+            self.tp += tp
+            self.fp += fp
+            self.fn += fn
+            self.tn += tn
+            self.n_chips += 1
+            self.n_valid += tp + fp + fn + tn
+            if tp + fp + fn:
+                self.chip_ious.append(tp / (tp + fp + fn))
+
+    def summary(self):
+        tp, fp, fn = self.tp, self.fp, self.fn
+        return {
+            "iou_global": tp / (tp + fp + fn) if tp + fp + fn else None,
+            "iou_media_chips": (
+                sum(self.chip_ious) / len(self.chip_ious) if self.chip_ious else None
+            ),
+            "f1_agua": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else None,
+            "precision_agua": tp / (tp + fp) if tp + fp else None,
+            "recall_agua": tp / (tp + fn) if tp + fn else None,
+            "tp": tp, "fp": fp, "tn": self.tn, "fn": fn,
+            "chips": self.n_chips,
+            "chips_iou_definido": len(self.chip_ious),
+            "pixeles_validos": self.n_valid,
+        }
+
+
+
+========================================================================
+ARCHIVO: src/metrics.py
+========================================================================
+"""Pérdida y métricas binarias: solo píxeles válidos (sin NoData)."""
+import torch
+from torch.nn import functional as F
+
+
+def masked_bce(logits, labels, valid):
+    loss_per_pixel = F.binary_cross_entropy_with_logits(
+        logits, labels, reduction="none"
+    )
+    return (loss_per_pixel * valid).sum() / valid.sum().clamp_min(1.0)
+
+
+
+def masked_dice(logits, labels, valid, smooth=1.0):
+    """Soft Dice loss sobre agua (clase 1); ignora los pixeles NoData.
+
+    Calcula Dice por chip y promedia solo los chips con pixeles validos.
+    """
+    probs = torch.sigmoid(logits) * valid
+    targets = labels * valid
+    dims = (1, 2, 3)
+    intersection = (probs * targets).sum(dim=dims)
+    denom = probs.sum(dim=dims) + targets.sum(dim=dims)
+    dice_loss = 1.0 - (2.0 * intersection + smooth) / (denom + smooth)
+    has_valid = valid.sum(dim=dims) > 0
+    if not has_valid.any():
+        return logits.sum() * 0.0
+    return dice_loss[has_valid].mean()
+
+
+def segmentation_loss(logits, labels, valid, name="bce"):
+    """M1: BCE. M2: 0.5 * BCE + 0.5 * Soft Dice."""
+    bce = masked_bce(logits, labels, valid)
+    if name == "bce":
+        return bce
+    if name == "bce_dice":
+        return 0.5 * bce + 0.5 * masked_dice(logits, labels, valid)
+    raise ValueError(f"Funcion de perdida no admitida: {name}")
+
+
+class WaterMetrics:
+    """IoU global + media IoU por chip, F1, precisión, recall y confusión."""
+
+    def __init__(self):
+        self.tp = self.fp = self.tn = self.fn = 0
+        self.chip_ious = []
+        self.n_chips = 0
+        self.n_valid = 0
+
+    @torch.no_grad()
+    def update(self, logits, labels, valid):
+        p = torch.sigmoid(logits) >= 0.5
+        y = labels >= 0.5
+        v = valid > 0.5
+        for i in range(p.shape[0]):
+            pi, yi, vi = p[i], y[i], v[i]
+            tp = int((pi & yi & vi).sum().item())
+            fp = int((pi & ~yi & vi).sum().item())
+            fn = int((~pi & yi & vi).sum().item())
+            tn = int((~pi & ~yi & vi).sum().item())
+            self.tp += tp
+            self.fp += fp
+            self.fn += fn
+            self.tn += tn
+            self.n_chips += 1
+            self.n_valid += tp + fp + fn + tn
+            if tp + fp + fn:
+                self.chip_ious.append(tp / (tp + fp + fn))
+
+    def summary(self):
+        tp, fp, fn = self.tp, self.fp, self.fn
+        return {
+            "iou_global": tp / (tp + fp + fn) if tp + fp + fn else None,
+            "iou_media_chips": (
+                sum(self.chip_ious) / len(self.chip_ious) if self.chip_ious else None
+            ),
+            "f1_agua": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else None,
+            "precision_agua": tp / (tp + fp) if tp + fp else None,
+            "recall_agua": tp / (tp + fn) if tp + fn else None,
+            "tp": tp, "fp": fp, "tn": self.tn, "fn": fn,
+            "chips": self.n_chips,
+            "chips_iou_definido": len(self.chip_ious),
+            "pixeles_validos": self.n_valid,
+        }
+
+
+
+========================================================================
+ARCHIVO: src/model.py
+========================================================================
+"""U-Net original: 2 canales SAR (VV/VH) -> 1 logit de agua por píxel."""
+import torch
+from torch import nn
+from torch.nn import functional as F
+
+
+class DoubleConv(nn.Module):
+    """Convolución 3x3 -> BatchNorm -> ReLU (dos veces)."""
+
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, 3, padding=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, 3, padding=1, bias=False),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+
+
+class Down(nn.Module):
+    """Reduce a la mitad la resolución espacial."""
+
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.MaxPool2d(2), DoubleConv(in_channels, out_channels)
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+
+
+class Up(nn.Module):
+    """Interpola, concatena skip connection y procesa las características."""
+
+    def __init__(self, in_channels, skip_channels, out_channels):
+        super().__init__()
+        self.conv = DoubleConv(in_channels + skip_channels, out_channels)
+
+    def forward(self, x, skip):
+        x = F.interpolate(x, size=skip.shape[-2:], mode="bilinear", align_corners=False)
+        return self.conv(torch.cat((skip, x), dim=1))
+
+
+class UNet(nn.Module):
+    """Arquitectura encoder-decoder de 3 reducciones para prueba de entrenamiento."""
+
+    def __init__(self, in_channels=2, out_channels=1, base=16):
+        super().__init__()
+        self.encoder0 = DoubleConv(in_channels, base)
+        self.encoder1 = Down(base, base * 2)
+        self.encoder2 = Down(base * 2, base * 4)
+        self.encoder3 = Down(base * 4, base * 8)
+        self.decoder1 = Up(base * 8, base * 4, base * 4)
+        self.decoder2 = Up(base * 4, base * 2, base * 2)
+        self.decoder3 = Up(base * 2, base, base)
+        self.output = nn.Conv2d(base, out_channels, 1)
+
+    def forward(self, x):
+        a = self.encoder0(x)
+        b = self.encoder1(a)
+        c = self.encoder2(b)
+        d = self.encoder3(c)
+        x = self.decoder1(d, c)
+        x = self.decoder2(x, b)
+        x = self.decoder3(x, a)
+        return self.output(x)  # Sin sigmoid; BCEWithLogitsLoss lo incorpora.
+
+
+
+========================================================================
+ARCHIVO: src/requirements.txt
+========================================================================
+numpy>=1.24
+rasterio>=1.3
+torch>=2.1
+matplotlib>=3.7
+
+
+
+========================================================================
+ARCHIVO: src/run_m1_m2.py
+========================================================================
+"""Entrena M1 (BCE) y M2 (BCE+Dice) en secuencia y evalua validacion.
+
+Uso desde la raiz del proyecto:
+    python -m src.run_m1_m2 --epochs 15 --batch-size 4
+"""
+import argparse
+import csv
+import json
+import subprocess
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+import torch
+
+
+def ejecutar(cmd, etiqueta):
+    print("\n" + "=" * 65, flush=True)
+    print(etiqueta, flush=True)
+    print(" ".join(str(x) for x in cmd), flush=True)
+    print("=" * 65, flush=True)
+    inicio = time.perf_counter()
+    subprocess.run(cmd, check=True)
+    duracion = time.perf_counter() - inicio
+    print(f"{etiqueta} completado en {duracion:.2f} s ({duracion / 60:.2f} min)", flush=True)
+
+
+def main():
+    p = argparse.ArgumentParser(description="Entrenar M1 y M2 sin mezclar test ni Bolivia")
+    p.add_argument("--root", type=Path, default=Path("data/raw/sen1floods11"))
+    p.add_argument("--epochs", type=int, default=15)
+    p.add_argument("--batch-size", type=int, default=4)
+    p.add_argument("--crop-size", type=int, default=512)
+    p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--base", type=int, default=16)
+    p.add_argument("--output-dir", type=Path, default=Path("outputs/experimentos_gold"))
+    p.add_argument("--no-eval", action="store_true", help="No ejecutar test.py sobre valid")
+    args = p.parse_args()
+
+    if min(args.epochs, args.batch_size, args.crop_size, args.base) <= 0:
+        p.error("epochs, batch-size, crop-size y base deben ser positivos")
+    if not (args.root / "splits/flood_handlabeled/flood_train_data.csv").exists():
+        p.error(f"No se encuentra el dataset: {args.root}")
+
+    if not torch.cuda.is_available():
+        p.error("CUDA no disponible: se cancela para no iniciar dos entrenamientos largos en CPU")
+
+    carpeta = args.output_dir / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f")
+    carpeta.mkdir(parents=True)
+    print(f"GPU: {torch.cuda.get_device_name(0)}", flush=True)
+    print(f"RESULTADOS: {carpeta}", flush=True)
+    configuracion = {"root": str(args.root), "epochs": args.epochs,
+                     "batch_size": args.batch_size, "crop_size": args.crop_size,
+                     "lr": args.lr, "seed": args.seed, "base": args.base,
+                     "train": "split oficial completo", "valid": "split oficial completo",
+                     "test": "reservado", "bolivia": "reservado"}
+    (carpeta / "config.json").write_text(
+        json.dumps(configuracion, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+
+    inicio_experimento = time.perf_counter()
+    modelos = [("M1_BCE", "bce"), ("M2_BCE_Dice", "bce_dice")]
+    checkpoints = []
+    for nombre, perdida in modelos:
+        modelo_dir = carpeta / nombre
+        modelo_dir.mkdir()
+        ckpt = modelo_dir / "best.pt"
+        ejecutar([
+            sys.executable, "-m", "src.train", "--root", str(args.root),
+            "--epochs", str(args.epochs), "--limit-train", "0", "--limit-valid", "0",
+            "--crop-size", str(args.crop_size), "--batch-size", str(args.batch_size),
+            "--lr", str(args.lr), "--seed", str(args.seed), "--base", str(args.base),
+            "--loss", perdida, "--output", str(ckpt)
+        ], f"ENTRENANDO {nombre}")
+        checkpoints.append((nombre, ckpt))
+
+    registros = []
+    for nombre, ckpt in checkpoints:
+        data = torch.load(ckpt, map_location="cpu", weights_only=True)
+        m = data["validation_metrics"]
+        registros.append({
+            "modelo": nombre, "mejor_epoca": data["best_epoch"],
+            "iou_global": m["iou_global"], "iou_media_chips": m["iou_media_chips"],
+            "f1_agua": m["f1_agua"], "precision_agua": m["precision_agua"],
+            "recall_agua": m["recall_agua"]
+        })
+    with (carpeta / "comparacion_valid.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=list(registros[0]))
+        writer.writeheader()
+        writer.writerows(registros)
+
+    # IoU comparable entre ambos modelos, por epoca.
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    for nombre, ckpt in checkpoints:
+        history_path = ckpt.with_suffix(".history.json")
+        history = json.loads(history_path.read_text(encoding="utf-8"))
+        xs = [item["epoch"] for item in history]
+        ys = [item["valid"]["iou_global"] for item in history]
+        plt.plot(xs, ys, marker="o", markersize=3, label=nombre)
+    plt.title("IoU global en validacion (sin test)")
+    plt.xlabel("Epoca")
+    plt.ylabel("IoU")
+    plt.ylim(0, 1)
+    plt.legend()
+    plt.grid(alpha=0.2)
+    plt.tight_layout()
+    plt.savefig(carpeta / "comparacion_iou_valid.png", dpi=150)
+    plt.close()
+
+    if not args.no_eval:
+        for nombre, ckpt in checkpoints:
+            try:
+                ejecutar([
+                    sys.executable, "-m", "src.test", "--root", str(args.root),
+                    "--checkpoint", str(ckpt), "--split", "valid",
+                    "--limit", "0", "--crop-size", str(args.crop_size),
+                    "--output-dir", str(carpeta / nombre / "evaluacion")
+                ], f"EVALUANDO {nombre} EN VALID")
+            except subprocess.CalledProcessError:
+                print(f"Aviso: fallo la visualizacion de {nombre}; pesos y comparacion_valid.csv estan guardados", flush=True)
+
+    duracion_experimento = time.perf_counter() - inicio_experimento
+    print(
+        f"\nFINALIZADO. Tiempo total M1+M2={duracion_experimento:.2f} s "
+        f"({duracion_experimento / 60:.2f} min). Revisa: {carpeta}",
+        flush=True,
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/run_m3_m4.py
+========================================================================
+"""Entrena M3 y M4 consecutivos con gold+weak, evalúa VALID y compara.
+
+Uso desde raíz (GPU Colab recomendado):
+python -m src.run_m3_m4 --root data/raw/sen1floods11 \
+  --epochs 12 --batch-size 8 --crop-size 512 --amp
+
+Para continuar en Colab: añadir --run-dir RUTA_EXISTENTE --resume.
+"""
+import argparse
+import csv
+import json
+import subprocess
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+import torch
+
+
+def run(cmd, title):
+    print(f"\n{'=' * 60}\n{title}\n{' '.join(map(str, cmd))}\n{'=' * 60}", flush=True)
+    start = time.perf_counter()
+    subprocess.run(cmd, check=True)
+    print(f"{title} terminó en {(time.perf_counter() - start) / 60:.2f} min", flush=True)
+
+
+def main():
+    p = argparse.ArgumentParser(description="Experimentos M3/M4 Sen1Floods11")
+    p.add_argument("--root", type=Path, default=Path("data/raw/sen1floods11"))
+    p.add_argument("--output-dir", type=Path, default=Path("outputs/experimentos_weak"))
+    p.add_argument("--run-dir", type=Path, default=None, help="Carpeta existente si reanudas")
+    p.add_argument("--resume", action="store_true")
+    p.add_argument("--epochs", type=int, default=12)
+    p.add_argument("--batch-size", type=int, default=8)
+    p.add_argument("--crop-size", type=int, default=512)
+    p.add_argument("--weak-limit", type=int, default=0, help="0=usar todos los débiles admisibles")
+    p.add_argument("--gold-limit", type=int, default=0, help="0=252 chips dorados de train")
+    p.add_argument("--lr", type=float, default=3e-4)
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--base", type=int, default=16)
+    p.add_argument("--num-workers", type=int, default=2)
+    p.add_argument("--patience", type=int, default=5)
+    p.add_argument("--amp", action="store_true")
+    p.add_argument("--allow-cpu", action="store_true", help="Solo pruebas breves")
+    p.add_argument("--no-eval", action="store_true")
+    args = p.parse_args()
+    if not args.root.exists():
+        p.error(f"Ruta de datos no existente: {args.root}")
+    if not torch.cuda.is_available() and not args.allow_cpu:
+        p.error("No se detectó GPU: para prueba corta puedes añadir --allow-cpu")
+    if args.resume and args.run_dir is None:
+        p.error("Para reanudar indica --run-dir CARPETA --resume")
+
+    run_dir = (args.run_dir if args.run_dir is not None else
+               args.output_dir / datetime.now().strftime("run_%Y%m%d_%H%M%S_%f"))
+    run_dir.mkdir(parents=True, exist_ok=True)
+    config_path = run_dir / "config.json"
+    config = {k: str(v) if isinstance(v, Path) else v
+              for k, v in vars(args).items() if k not in ("resume", "run_dir")}
+    if args.resume:
+        if config_path.exists():
+            old = json.loads(config_path.read_text(encoding="utf-8"))
+            for key in ("batch_size", "crop_size", "weak_limit", "gold_limit", "lr", "seed", "base"):
+                if old.get(key) != config.get(key):
+                    p.error(f"Al reanudar no cambies {key}: anterior={old.get(key)}, nuevo={config.get(key)}")
+    else:
+        if config_path.exists():
+            p.error(f"Carpeta existente: {run_dir}. Usa --resume para continuar.")
+        config_path.write_text(json.dumps(config, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}", flush=True)
+    print(f"RESULTADOS: {run_dir}", flush=True)
+
+    models = (("M3_Weak_BCE", "bce"), ("M4_Weak_BCE_Dice", "bce_dice"))
+    checkpoints = []
+    for name, loss in models:
+        out = run_dir / name
+        out.mkdir(exist_ok=True)
+        ckpt = out / "best.pt"
+        done = out / "best.timing.json"
+        if args.resume and done.exists() and ckpt.exists():
+            print(f"{name}: ya terminó. Se conserva checkpoint.", flush=True)
+        else:
+            cmd = [sys.executable, "-m", "src.train_weak", "--root", str(args.root),
+                   "--loss", loss, "--epochs", str(args.epochs),
+                   "--batch-size", str(args.batch_size), "--crop-size", str(args.crop_size),
+                   "--weak-limit", str(args.weak_limit), "--gold-limit", str(args.gold_limit),
+                   "--lr", str(args.lr), "--seed", str(args.seed), "--base", str(args.base),
+                   "--num-workers", str(args.num_workers), "--patience", str(args.patience),
+                   "--output", str(ckpt)]
+            if args.amp:
+                cmd.append("--amp")
+            if args.resume:
+                cmd.append("--resume")
+            run(cmd, f"ENTRENANDO {name}")
+        checkpoints.append((name, ckpt))
+
+    rows = []
+    for name, ckpt in checkpoints:
+        meta = torch.load(ckpt, map_location="cpu", weights_only=True)
+        stats = meta["validation_metrics"]
+        timings = json.loads(ckpt.with_suffix(".timing.json").read_text(encoding="utf-8"))
+        rows.append({
+            "modelo": name, "mejor_epoca": meta["best_epoch"],
+            "iou_global": stats["iou_global"],
+            "iou_media_chips": stats["iou_media_chips"],
+            "f1_agua": stats["f1_agua"],
+            "precision_agua": stats["precision_agua"],
+            "recall_agua": stats["recall_agua"],
+            "tiempo_epocas_s": timings["tiempo_epocas_acumulado_s"],
+        })
+    with (run_dir / "comparacion_valid.csv").open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    for name, ckpt in checkpoints:
+        history = json.loads(ckpt.with_suffix(".history.json").read_text(encoding="utf-8"))
+        plt.plot([e["epoch"] for e in history],
+                 [e["valid"]["iou_global"] for e in history], marker="o", label=name)
+    plt.title("M3 y M4: IoU validación (89 chips dorados)")
+    plt.xlabel("Época")
+    plt.ylabel("IoU global")
+    plt.ylim(0, 1)
+    plt.legend()
+    plt.grid(alpha=0.2)
+    plt.tight_layout()
+    plt.savefig(run_dir / "comparacion_iou_valid.png", dpi=150)
+    plt.close()
+
+    if not args.no_eval:
+        for name, ckpt in checkpoints:
+            cmd = [sys.executable, "-m", "src.test", "--root", str(args.root),
+                   "--checkpoint", str(ckpt), "--split", "valid", "--limit", "0",
+                   "--crop-size", str(args.crop_size), "--output-dir", str(run_dir / name / "evaluacion")]
+            run(cmd, f"EVALUANDO {name} EN VALID")
+    print(f"\nFINALIZADO: {run_dir}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/test.py
+========================================================================
+"""Evaluacion y dos visualizaciones de U-Net en eventos distintos de Sen1Floods11.
+
+Desde la raiz del proyecto:
+python -m src.test --root data/raw/sen1floods11 --split valid --limit 0
+"""
+import argparse
+import json
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")  # Guardar figuras sin interfaz grafica.
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+import numpy as np
+import rasterio
+import torch
+from torch.utils.data import DataLoader
+
+from .dataset import Sen1Floods11Dataset
+from .metrics import WaterMetrics
+from .model import UNet
+
+
+def contraste(banda):
+    """Ajusta contraste solo para mostrar la imagen (no cambia el modelo)."""
+    b = np.ma.asarray(banda).astype(np.float32).filled(np.nan)
+    valores = b[np.isfinite(b) & (b > -1000)]
+    if valores.size == 0:
+        return np.zeros(b.shape, dtype=np.float32)
+    bajo, alto = np.percentile(valores, [2, 98])
+    return np.clip((np.nan_to_num(b, nan=bajo) - bajo) / max(alto - bajo, 1e-6), 0, 1)
+
+
+class Evaluator:
+    def __init__(self, model, device):
+        self.model = model.to(device).eval()
+        self.device = device
+
+    @torch.no_grad()
+    def evaluate(self, loader):
+        metricas = WaterMetrics()
+        for x, y, valid in loader:
+            logits = self.model(x.to(self.device))
+            metricas.update(logits, y.to(self.device), valid.to(self.device))
+        return metricas.summary()
+
+    @torch.no_grad()
+    def save_example(self, dataset, filename, index):
+        x, y, valid = dataset[index]
+        logits = self.model(x.unsqueeze(0).to(self.device))
+        pred = torch.sigmoid(logits)[0, 0].cpu().numpy() >= 0.5
+        real = y[0].numpy() >= 0.5
+        area = valid[0].numpy().astype(bool)
+        image_path, _ = dataset.pairs[index]
+
+        with rasterio.open(image_path) as src:
+            vv, vh = src.read([1, 2], masked=True)
+        if vv.shape != pred.shape:
+            raise ValueError("Usa --crop-size 512 para comparar los chips originales completos.")
+
+        # Busca RGB de Sentinel-2 en la misma ubicacion.
+        s2_path = image_path.parent.parent / "S2Hand" / image_path.name.replace("_S1Hand.tif", "_S2Hand.tif")
+        if s2_path.exists():
+            with rasterio.open(s2_path) as src:
+                rgb = src.read([4, 3, 2], masked=True)
+            rgb_img = np.stack([contraste(b) for b in rgb], axis=-1)
+            titulo_rgb = "Sentinel-2 RGB (optica)"
+        else:
+            rgb_img = None
+            titulo_rgb = "Sentinel-2 no descargado"
+
+        clases = ListedColormap(["#e5e7eb", "#0284c7", "#111827"])
+        ref = np.where(area, real.astype(np.uint8), 2)
+        salida = np.where(area, pred.astype(np.uint8), 2)
+        errores = np.zeros(real.shape, dtype=np.uint8)
+        errores[real & pred & area] = 1   # TP verde
+        errores[~real & pred & area] = 2  # FP rojo
+        errores[real & ~pred & area] = 3  # FN amarillo
+        errores[~area] = 4               # NoData negro
+        colores_error = ListedColormap(["#e5e7eb", "#16a34a", "#ef4444", "#facc15", "#111827"])
+
+        tp = np.sum(real & pred & area)
+        fp = np.sum(~real & pred & area)
+        fn = np.sum(real & ~pred & area)
+        iou = tp / (tp + fp + fn) if (tp + fp + fn) else None
+        valor_iou = "n/d" if iou is None else f"{iou:.3f}"
+
+        fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+        axes[0, 0].imshow(contraste(vv), cmap="gray")
+        axes[0, 0].set_title("Sentinel-1 VV (radar)")
+        axes[0, 1].imshow(contraste(vh), cmap="gray")
+        axes[0, 1].set_title("Sentinel-1 VH (radar)")
+        if rgb_img is not None:
+            axes[0, 2].imshow(rgb_img)
+        else:
+            axes[0, 2].text(0.5, 0.5, "Sin imagen S2", ha="center", va="center", transform=axes[0, 2].transAxes)
+        axes[0, 2].set_title(titulo_rgb)
+        axes[1, 0].imshow(ref, cmap=clases, vmin=0, vmax=2)
+        axes[1, 0].set_title("Referencia: agua azul")
+        axes[1, 1].imshow(salida, cmap=clases, vmin=0, vmax=2)
+        axes[1, 1].set_title("Prediccion U-Net: agua azul")
+        axes[1, 2].imshow(errores, cmap=colores_error, vmin=0, vmax=4)
+        axes[1, 2].set_title("TP verde | FP rojo | FN amarillo")
+        for ax in axes.flat:
+            ax.axis("off")
+        fig.suptitle(f"{image_path.stem}   |   IoU del chip: {valor_iou}", fontsize=12)
+        fig.tight_layout()
+        filename = Path(filename)
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(filename, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--root", type=Path, default=Path("data/raw/sen1floods11"))
+    p.add_argument("--checkpoint", type=Path, default=Path("outputs/unet_prueba_best.pt"))
+    p.add_argument("--split", choices=["valid", "test", "bolivia"], default="valid")
+    p.add_argument("--limit", type=int, default=0, help="0 = todos los chips del split")
+    p.add_argument("--batch-size", type=int, default=1)
+    p.add_argument("--crop-size", type=int, default=512)
+    p.add_argument("--output-dir", type=Path, default=Path("outputs"))
+    args = p.parse_args()
+
+    if args.split == "test":
+        print("ATENCION: test es el conjunto reservado para evaluacion final.")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
+    model = UNet(in_channels=2, out_channels=1, base=checkpoint["base"])
+    model.load_state_dict(checkpoint["state_dict"])
+    ds = Sen1Floods11Dataset(
+        args.root, args.split, None if args.limit == 0 else args.limit,
+        args.crop_size, checkpoint.get("seed", 42)
+    )
+    loader = DataLoader(ds, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    evaluator = Evaluator(model, device)
+    stats = evaluator.evaluate(loader)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    json_file = args.output_dir / f"metricas_{args.split}.json"
+    json_file.write_text(json.dumps(stats, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+
+    # Elegir dos imagenes de paises distintos, no siempre dataset[0].
+    indices = []
+    paises = set()
+    for i, (ruta, _) in enumerate(ds.pairs):
+        pais = ruta.stem.split("_", 1)[0]
+        if pais not in paises:
+            paises.add(pais)
+            indices.append(i)
+        if len(indices) == 2:
+            break
+    if len(indices) < 2 and len(ds) >= 2:
+        indices = [0, 1]
+    if len(indices) < 2:
+        raise RuntimeError("El split seleccionado no contiene al menos dos chips para generar ejemplos.")
+
+    for i in indices:
+        chip = ds.pairs[i][0].stem.replace("_S1Hand", "")
+        png = args.output_dir / f"prediccion_{args.split}_{chip}.png"
+        evaluator.save_example(ds, png, i)
+        print("Figura:", png)
+    print(json.dumps(stats, ensure_ascii=False, indent=2))
+    print("Metricas:", json_file)
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/train_backup.py
+========================================================================
+"""Entrenamiento corto de una U-Net sobre etiquetas doradas de Sen1Floods11.
+
+Desde la carpeta raíz del proyecto:
+python -m src.train --root raw/sen1floods11 --epochs 3
+"""
+import argparse
+import json
+import random
+from pathlib import Path
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader
+
+from src.dataset import Sen1Floods11Dataset
+from src.metrics import WaterMetrics, masked_bce
+from src.model import UNet
+
+
+def number(value):
+    return "n/d" if value is None else f"{value:.4f}"
+
+
+class Trainer:
+    def __init__(self, model, device, lr=1e-3):
+        self.model = model.to(device)
+        self.device = device
+        self.optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+
+    def epoch(self, loader, training):
+        self.model.train(training)
+        stats = WaterMetrics()
+        weighted_loss = 0.0
+        valid_total = 0
+        for x, y, valid in loader:
+            x, y, valid = (t.to(self.device) for t in (x, y, valid))
+            count = int(valid.sum().item())
+            if count == 0:
+                continue
+            with torch.set_grad_enabled(training):
+                logits = self.model(x)
+                loss = masked_bce(logits, y, valid)
+                if training:
+                    self.optimizer.zero_grad(set_to_none=True)
+                    loss.backward()
+                    self.optimizer.step()
+            weighted_loss += loss.item() * count
+            valid_total += count
+            stats.update(logits.detach(), y, valid)
+        if not valid_total:
+            raise RuntimeError("No se encontraron píxeles válidos para entrenar/evaluar")
+        return {"loss": weighted_loss / valid_total, **stats.summary()}
+
+    def fit(self, train_loader, valid_loader, epochs, output, base, crop_size, seed):
+        output = Path(output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        history = []
+        best_iou = -1.0
+        for epoch in range(1, epochs + 1):
+            tr = self.epoch(train_loader, training=True)
+            va = self.epoch(valid_loader, training=False)
+            history.append({"epoch": epoch, "train": tr, "valid": va})
+            print(
+                f"Época {epoch}/{epochs} | "
+                f"Train BCE={tr['loss']:.4f} | Valid BCE={va['loss']:.4f} | "
+                f"IoU={number(va['iou_global'])} | F1={number(va['f1_agua'])}"
+            )
+            iou = va["iou_global"]
+            if epoch == 1 or (iou is not None and iou > best_iou):
+                best_iou = -1.0 if iou is None else iou
+                torch.save({
+                    "state_dict": self.model.state_dict(),
+                    "base": base,
+                    "crop_size_train": crop_size,
+                    "normalizacion_db": [-50.0, 5.0],
+                    "seed": seed,
+                    "best_epoch": epoch,
+                    "validation_metrics": va,
+                }, output)
+                print(f"  Mejor modelo guardado: {output}")
+        with output.with_suffix(".history.json").open("w", encoding="utf-8") as fh:
+            json.dump(history, fh, ensure_ascii=False, indent=2, allow_nan=False)
+        return history
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--root", type=Path, default=Path("raw/sen1floods11"))
+    p.add_argument("--epochs", type=int, default=3)
+    p.add_argument("--limit-train", type=int, default=40)
+    p.add_argument("--limit-valid", type=int, default=10)
+    p.add_argument("--crop-size", type=int, default=256)
+    p.add_argument("--batch-size", type=int, default=4)
+    p.add_argument("--base", type=int, default=16)
+    p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--output", type=Path, default=Path("outputs/unet_prueba_best.pt"))
+    args = p.parse_args()
+    if min(args.epochs, args.limit_train, args.limit_valid, args.crop_size, args.batch_size, args.base) <= 0:
+        p.error("Épocas, límites, crop, batch y base deben ser positivos")
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Dispositivo:", device)
+    tr = Sen1Floods11Dataset(args.root, "train", args.limit_train, args.crop_size, args.seed)
+    va = Sen1Floods11Dataset(args.root, "valid", args.limit_valid, args.crop_size, args.seed)
+    train_loader = DataLoader(tr, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    valid_loader = DataLoader(va, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    model = UNet(in_channels=2, out_channels=1, base=args.base)
+    print("Parámetros:", sum(p.numel() for p in model.parameters()))
+    Trainer(model, device, args.lr).fit(
+        train_loader, valid_loader, args.epochs, args.output,
+        args.base, args.crop_size, args.seed
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/train_weak.py
+========================================================================
+"""Entrena M3 (BCE) o M4 (BCE + Dice) con gold+weak de Sen1Floods11.
+
+Ejecutar desde la carpeta raíz:
+python -m src.train_weak --root data/raw/sen1floods11 --loss bce --epochs 2 \
+  --weak-limit 64 --batch-size 4 --output outputs/prueba_m3/best.pt
+"""
+import argparse
+import json
+import random
+import time
+from pathlib import Path
+
+import numpy as np
+import torch
+from torch.utils.data import ConcatDataset, DataLoader
+
+from .dataset import Sen1Floods11Dataset
+from .weak_dataset import Sen1WeakDataset, BalancedGoldWeakBatchSampler
+from .metrics import WaterMetrics, segmentation_loss
+from .model import UNet
+
+
+def json_dump(path, value):
+    Path(path).write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False), encoding="utf-8")
+
+
+class WeakTrainer:
+    def __init__(self, model, device, loss_name="bce", lr=3e-4, amp=False):
+        self.model = model.to(device)
+        self.device = device
+        self.loss_name = loss_name
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
+        self.amp_requested = bool(amp)
+        if self.amp_requested and device.type == "cuda":
+            capability = torch.cuda.get_device_capability()
+            # En GPUs anteriores a Ampere, FP16 puede producir NaN durante el
+            # entrenamiento de esta U-Net aunque la pérdida se calcule en FP32.
+            self.amp = capability >= (8, 0)
+            if not self.amp:
+                print(
+                    f"Aviso: AMP solicitado, pero la GPU tiene capacidad "
+                    f"{capability[0]}.{capability[1]}; se usará FP32 para evitar NaN.",
+                    flush=True,
+                )
+        else:
+            self.amp = False
+        self.scaler = torch.amp.GradScaler("cuda", enabled=self.amp)
+
+    def run_epoch(self, loader, training):
+        self.model.train(training)
+        metricas = WaterMetrics() if not training else None
+        total_loss = 0.0
+        total_valid = 0
+        for x, y, valid in loader:
+            x = x.to(self.device, non_blocking=True)
+            y = y.to(self.device, non_blocking=True)
+            valid = valid.to(self.device, non_blocking=True)
+            count = int(valid.sum().item())
+            if count == 0:
+                continue
+            with torch.set_grad_enabled(training):
+                with torch.amp.autocast(device_type="cuda", enabled=self.amp):
+                    logits = self.model(x)
+                    # Calcula la pérdida en FP32 aun con autocast para estabilidad.
+                    loss = segmentation_loss(logits.float(), y, valid, self.loss_name)
+                if training:
+                    self.optimizer.zero_grad(set_to_none=True)
+                    self.scaler.scale(loss).backward()
+                    self.scaler.unscale_(self.optimizer)
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
+                    self.scaler.step(self.optimizer)
+                    self.scaler.update()
+            total_loss += float(loss.detach().item()) * count
+            total_valid += count
+            if metricas is not None:
+                metricas.update(logits.detach(), y, valid)
+        if total_valid == 0:
+            raise RuntimeError("No existen píxeles válidos")
+        return {"loss": total_loss / total_valid,
+                **(metricas.summary() if metricas is not None else {})}
+
+    def fit(self, train_loader, valid_loader, sampler, args, counts):
+        best_path = args.output
+        best_path.parent.mkdir(parents=True, exist_ok=True)
+        last_path = best_path.with_name("last.pt")
+        history_path = best_path.with_suffix(".history.json")
+        timing_path = best_path.with_suffix(".timing.json")
+        history = []
+        best_iou, best_epoch, first_epoch = -1.0, None, 1
+        if args.resume:
+            if last_path.exists():
+                data = torch.load(last_path, map_location="cpu", weights_only=True)
+                if (data.get("loss_name") != args.loss or
+                    data.get("counts") != counts or
+                    data.get("base") != args.base):
+                    raise ValueError("Configuración distinta a la guardada en last.pt")
+                self.model.load_state_dict(data["state_dict"])
+                self.optimizer.load_state_dict(data["optimizer_state_dict"])
+                if self.amp and data.get("scaler_state_dict"):
+                    self.scaler.load_state_dict(data["scaler_state_dict"])
+                first_epoch = data["epoch"] + 1
+                best_iou, best_epoch = data["best_iou"], data["best_epoch"]
+                history = json.loads(history_path.read_text(encoding="utf-8"))
+                print(f"Reanudando desde época {first_epoch}; mejor IoU={best_iou:.4f}")
+            else:
+                print("No existe last.pt: se iniciará desde cero")
+        start = time.perf_counter()
+        epochs_done = 0
+        for epoch in range(first_epoch, args.epochs + 1):
+            sampler.set_epoch(epoch)
+            t0 = time.perf_counter()
+            tr = self.run_epoch(train_loader, True)
+            if self.device.type == "cuda":
+                torch.cuda.synchronize()
+            t_train = time.perf_counter() - t0
+            t1 = time.perf_counter()
+            val = self.run_epoch(valid_loader, False)
+            if self.device.type == "cuda":
+                torch.cuda.synchronize()
+            t_valid = time.perf_counter() - t1
+            iou = val["iou_global"]
+            improved = iou is not None and iou > best_iou
+            if improved:
+                best_iou, best_epoch = iou, epoch
+                torch.save({
+                    "state_dict": self.model.state_dict(), "base": args.base,
+                    "crop_size_train": args.crop_size, "normalizacion_db": [-50.0, 5.0],
+                    "seed": args.seed, "loss_name": args.loss, "best_epoch": epoch,
+                    "validation_metrics": val, "training_counts": counts,
+                    "model_family": "gold_weak", "gold_fraction": 0.5,
+                }, best_path)
+            history.append({
+                "epoch": epoch, "train": tr, "valid": val,
+                "tiempo_train_s": round(t_train, 2),
+                "tiempo_valid_s": round(t_valid, 2),
+                "tiempo_epoca_s": round(t_train + t_valid, 2),
+            })
+            json_dump(history_path, history)
+            torch.save({
+                "state_dict": self.model.state_dict(),
+                "optimizer_state_dict": self.optimizer.state_dict(),
+                "scaler_state_dict": self.scaler.state_dict(),
+                "epoch": epoch, "best_iou": best_iou, "best_epoch": best_epoch,
+                "loss_name": args.loss, "counts": counts, "base": args.base,
+                "seed": args.seed, "crop_size": args.crop_size,
+            }, last_path)
+            epochs_done += 1
+            print(f"Época {epoch}/{args.epochs} | Train={tr['loss']:.4f} | "
+                  f"Valid={val['loss']:.4f} | IoU={iou:.4f} | "
+                  f"F1={val['f1_agua']:.4f} | "
+                  f"Train={t_train:.1f}s | Valid={t_valid:.1f}s "
+                  f"{'[MEJOR]' if improved else ''}", flush=True)
+            if args.patience > 0 and best_epoch is not None and epoch - best_epoch >= args.patience:
+                print("Early stopping: sin mejora del IoU de validación", flush=True)
+                break
+        json_dump(timing_path, {
+            "tiempo_sesion_s": round(time.perf_counter() - start, 2),
+            "epocas_ejecutadas_en_sesion": epochs_done,
+            "mejor_epoca": best_epoch, "mejor_iou_valid": best_iou,
+            "tiempo_epocas_acumulado_s": round(sum(h["tiempo_epoca_s"] for h in history), 2),
+            "cuentas": counts,
+        })
+        return history
+
+
+def main():
+    p = argparse.ArgumentParser(description="M3/M4: etiquetas doradas + débiles")
+    p.add_argument("--root", type=Path, default=Path("data/raw/sen1floods11"))
+    p.add_argument("--loss", choices=("bce", "bce_dice"), required=True)
+    p.add_argument("--epochs", type=int, default=12)
+    p.add_argument("--batch-size", type=int, default=8)
+    p.add_argument("--crop-size", type=int, default=512)
+    p.add_argument("--weak-limit", type=int, default=0, help="0 = todos los débiles admitidos")
+    p.add_argument("--gold-limit", type=int, default=0, help="0 = 252 del train oficial")
+    p.add_argument("--lr", type=float, default=3e-4)
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--base", type=int, default=16)
+    p.add_argument("--num-workers", type=int, default=2)
+    p.add_argument("--patience", type=int, default=5, help="0 desactiva early stopping")
+    p.add_argument("--amp", action="store_true", help="Mixed precision en CUDA")
+    p.add_argument("--resume", action="store_true", help="Cargar last.pt para continuar")
+    p.add_argument("--output", type=Path, required=True)
+    args = p.parse_args()
+    if args.batch_size < 2 or args.batch_size % 2:
+        p.error("batch-size debe ser PAR y >= 2")
+    if min(args.epochs, args.crop_size, args.base) <= 0 or args.weak_limit < 0 or args.gold_limit < 0:
+        p.error("Parámetros inválidos")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
+    torch.backends.cudnn.benchmark = False
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Dispositivo: {device} | Pérdida: {args.loss} | AMP: {args.amp}", flush=True)
+    gold = Sen1Floods11Dataset(args.root, "train", None if args.gold_limit == 0 else args.gold_limit,
+                               args.crop_size, args.seed)
+    valid = Sen1Floods11Dataset(args.root, "valid", None, args.crop_size, args.seed)
+    weak = Sen1WeakDataset(args.root, args.crop_size,
+                           None if args.weak_limit == 0 else args.weak_limit,
+                           args.seed, args.output.parent / "auditoria_weak.json")
+    counts = {"gold": len(gold), "weak": len(weak), "valid_gold": len(valid)}
+    sampler = BalancedGoldWeakBatchSampler(len(gold), len(weak), args.batch_size, args.seed)
+    data = ConcatDataset([gold, weak])
+    train_loader = DataLoader(data, batch_sampler=sampler,
+                              num_workers=args.num_workers, pin_memory=device.type == "cuda")
+    val_loader = DataLoader(valid, batch_size=args.batch_size, shuffle=False,
+                            num_workers=args.num_workers, pin_memory=device.type == "cuda")
+    model = UNet(in_channels=2, out_channels=1, base=args.base)
+    print(f"Chips: {counts} | Lotes por época: {len(train_loader)} | "
+          f"Parámetros: {sum(p.numel() for p in model.parameters())}", flush=True)
+    WeakTrainer(model, device, args.loss, args.lr, args.amp).fit(
+        train_loader, val_loader, sampler, args, counts)
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/train.py
+========================================================================
+"""Entrenamiento corto de una U-Net sobre etiquetas doradas de Sen1Floods11.
+
+Desde la carpeta raíz del proyecto:
+python -m src.train --root raw/sen1floods11 --epochs 3
+"""
+import argparse
+import json
+import random
+import time
+from pathlib import Path
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader
+
+from .dataset import Sen1Floods11Dataset
+from .metrics import WaterMetrics, segmentation_loss
+from .model import UNet
+
+
+def number(value):
+    return "n/d" if value is None else f"{value:.4f}"
+
+
+class Trainer:
+    def __init__(self, model, device, lr=1e-3, loss_name="bce"):
+        self.model = model.to(device)
+        self.device = device
+        self.loss_name = loss_name
+        self.optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+
+    def epoch(self, loader, training):
+        self.model.train(training)
+        stats = WaterMetrics()
+        weighted_loss = 0.0
+        valid_total = 0
+        for x, y, valid in loader:
+            x, y, valid = (t.to(self.device) for t in (x, y, valid))
+            count = int(valid.sum().item())
+            if count == 0:
+                continue
+            with torch.set_grad_enabled(training):
+                logits = self.model(x)
+                loss = segmentation_loss(logits, y, valid, self.loss_name)
+                if training:
+                    self.optimizer.zero_grad(set_to_none=True)
+                    loss.backward()
+                    self.optimizer.step()
+            weighted_loss += loss.item() * count
+            valid_total += count
+            stats.update(logits.detach(), y, valid)
+        if not valid_total:
+            raise RuntimeError("No se encontraron píxeles válidos para entrenar/evaluar")
+        return {"loss": weighted_loss / valid_total, **stats.summary()}
+
+    def fit(self, train_loader, valid_loader, epochs, output, base, crop_size, seed):
+        output = Path(output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        history = []
+        best_iou = -1.0
+        entrenamiento_inicio = time.perf_counter()
+        for epoch in range(1, epochs + 1):
+            epoca_inicio = time.perf_counter()
+            tr = self.epoch(train_loader, training=True)
+            va = self.epoch(valid_loader, training=False)
+            duracion_epoca = time.perf_counter() - epoca_inicio
+            history.append({"epoch": epoch, "train": tr, "valid": va, "duration_seconds": duracion_epoca})
+            print(
+                f"Época {epoch}/{epochs} | "
+                f"Train loss={tr['loss']:.4f} | Valid loss={va['loss']:.4f} | "
+                f"IoU={number(va['iou_global'])} | F1={number(va['f1_agua'])} | "
+                f"Tiempo={duracion_epoca:.2f} s",
+                flush=True,
+            )
+            iou = va["iou_global"]
+            if epoch == 1 or (iou is not None and iou > best_iou):
+                best_iou = -1.0 if iou is None else iou
+                torch.save({
+                    "state_dict": self.model.state_dict(),
+                    "base": base,
+                    "crop_size_train": crop_size,
+                    "normalizacion_db": [-50.0, 5.0],
+                    "seed": seed,
+                    "loss_name": self.loss_name,
+                    "best_epoch": epoch,
+                    "validation_metrics": va,
+                }, output)
+                print(f"  Mejor modelo guardado: {output}")
+            # Persistir historial tras cada epoca; sobrevive a interrupciones.
+            with output.with_suffix(".history.json").open("w", encoding="utf-8") as fh:
+                json.dump(history, fh, ensure_ascii=False, indent=2, allow_nan=False)
+        duracion_total = time.perf_counter() - entrenamiento_inicio
+        print(
+            f"Entrenamiento completado | Tiempo total={duracion_total:.2f} s "
+            f"({duracion_total / 60:.2f} min)",
+            flush=True,
+        )
+        return history
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--root", type=Path, default=Path("raw/sen1floods11"))
+    p.add_argument("--epochs", type=int, default=3)
+    p.add_argument("--loss", choices=("bce", "bce_dice"), default="bce")
+    p.add_argument("--limit-train", type=int, default=40)
+    p.add_argument("--limit-valid", type=int, default=10)
+    p.add_argument("--crop-size", type=int, default=256)
+    p.add_argument("--batch-size", type=int, default=4)
+    p.add_argument("--base", type=int, default=16)
+    p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--output", type=Path, default=Path("outputs/unet_prueba_best.pt"))
+    args = p.parse_args()
+    if min(args.epochs, args.crop_size, args.batch_size, args.base) <= 0:
+        p.error("Epocas, crop, batch y base deben ser positivos")
+    if args.limit_train < 0 or args.limit_valid < 0:
+        p.error("Los limites de train y valid deben ser >= 0 (0 = todos)")
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Dispositivo:", device)
+    tr = Sen1Floods11Dataset(args.root, "train", None if args.limit_train == 0 else args.limit_train, args.crop_size, args.seed)
+    va = Sen1Floods11Dataset(args.root, "valid", None if args.limit_valid == 0 else args.limit_valid, args.crop_size, args.seed)
+    train_loader = DataLoader(tr, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    valid_loader = DataLoader(va, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    model = UNet(in_channels=2, out_channels=1, base=args.base)
+    print("Parámetros:", sum(p.numel() for p in model.parameters()))
+    print("Funcion de perdida:", args.loss)
+    Trainer(model, device, args.lr, args.loss).fit(
+        train_loader, valid_loader, args.epochs, args.output,
+        args.base, args.crop_size, args.seed
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+========================================================================
+ARCHIVO: src/weak_dataset.py
+========================================================================
+"""Sen1Floods11: pares de etiquetas débiles S1Otsu, con auditoría espacial.
+
+NO utiliza regiones de evaluación (Bolivia, valid, test) para entrenar.
+Misma normalización VV/VH que src.dataset.Sen1Floods11Dataset.
+"""
+import json
+import math
+import random
+from pathlib import Path
+
+import numpy as np
+import rasterio
+from rasterio.windows import Window
+from rasterio.warp import transform_bounds
+import torch
+from torch.utils.data import Dataset, Sampler
+
+from .dataset import Sen1Floods11Dataset
+
+
+def bounds_wgs84(path):
+    with rasterio.open(path) as src:
+        if src.crs is None:
+            raise ValueError(f"GeoTIFF sin CRS: {path}")
+        if src.crs.to_epsg() == 4326:
+            return tuple(src.bounds)
+        return transform_bounds(src.crs, "EPSG:4326", *src.bounds)
+
+
+def overlap(a, b):
+    """Solapamiento de área positivo de dos bounding boxes (sin incluir bordes)."""
+    return min(a[2], b[2]) > max(a[0], b[0]) and min(a[3], b[3]) > max(a[1], b[1])
+
+
+class Sen1WeakDataset(Dataset):
+    """Chips S1Weak + S1OtsuLabelWeak, excluyendo regiones retenidas."""
+
+    def __init__(self, root, crop_size=512, limit=None, seed=42, audit_path=None):
+        self.root = Path(root)
+        self.crop_size = crop_size
+        self.rng = random.Random(seed)
+        weak_root = self.root / "data/flood_events/WeaklyLabeled"
+        image_dir = weak_root / "S1Weak"
+        mask_dir = weak_root / "S1OtsuLabelWeak"
+        if not image_dir.is_dir() or not mask_dir.is_dir():
+            raise FileNotFoundError("Faltan S1Weak / S1OtsuLabelWeak. Descarga con --mode weak")
+
+        # Recopilar regiones doradas reservadas: no usar en el entrenamiento.
+        holdout = []
+        for split in ("valid", "test", "bolivia"):
+            ref = Sen1Floods11Dataset(self.root, split, limit=None, crop_size=crop_size, seed=seed)
+            holdout += [(path.stem.split("_", 1)[0].casefold(), bounds_wgs84(path))
+                        for path, _ in ref.pairs]
+
+        images = sorted(image_dir.glob("*_S1Weak.tif"))
+        if not images:
+            raise FileNotFoundError(f"No hay chips S1Weak en {image_dir}")
+        pairs, ignored = [], {"bolivia": 0, "solapamiento_holdout": 0}
+        missing = []
+        for image in images:
+            prefix = image.name.removesuffix("_S1Weak.tif")
+            mask = mask_dir / f"{prefix}_S1OtsuLabelWeak.tif"
+            if not mask.is_file():
+                missing.append(mask.name)
+                continue
+            country = prefix.split("_", 1)[0].casefold()
+            if country == "bolivia":
+                ignored["bolivia"] += 1
+                continue
+            bbox = bounds_wgs84(image)
+            if any(overlap(bbox, ref_bbox) for ref_country, ref_bbox in holdout
+                   if ref_country == country):
+                ignored["solapamiento_holdout"] += 1
+                continue
+            pairs.append((image, mask))
+        if missing:
+            raise FileNotFoundError(
+                f"Faltan {len(missing)} máscaras débiles. Primera: {missing[0]}"
+            )
+        if not pairs:
+            raise ValueError("Tras excluir holdouts, no quedan chips débiles")
+        self.rng.shuffle(pairs)
+        allowed = len(pairs)
+        self.pairs = pairs[:limit] if limit is not None else pairs
+        summary = {
+            "archivos_S1Weak": len(images), "pares_debiles_admisibles": allowed,
+            "pares_usados": len(self.pairs), "exclusiones": ignored,
+            "criterio": "Excluir Bolivia y bbox que intersecta valid/test/Bolivia",
+            "fuente_etiqueta": "S1OtsuLabelWeak",
+            "advertencia": "El filtrado espacial no garantiza independencia entre eventos cercanos",
+        }
+        if audit_path is not None:
+            path = Path(audit_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"[weak] {len(self.pairs)} parejas seleccionadas de {len(images)} "
+              f"(excluidas Bolivia={ignored['bolivia']}, overlap={ignored['solapamiento_holdout']})")
+
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, idx):
+        image_path, mask_path = self.pairs[idx]
+        with rasterio.open(image_path) as sar, rasterio.open(mask_path) as reference:
+            if sar.count != 2 or reference.count != 1:
+                raise ValueError(f"Bandas inesperadas: {image_path.name}")
+            if (sar.height, sar.width) != (reference.height, reference.width):
+                raise ValueError(f"Dimensiones distintas: {image_path.name}")
+            if sar.crs != reference.crs or not sar.transform.almost_equals(reference.transform):
+                raise ValueError(f"Grillas distintas: {image_path.name}")
+            size = self.crop_size
+            if size is None:
+                window = None
+            else:
+                if size <= 0 or size > min(sar.height, sar.width):
+                    raise ValueError(f"crop-size={size} no cabe en {image_path.name}")
+                row = random.randint(0, sar.height - size)
+                col = random.randint(0, sar.width - size)
+                window = Window(col, row, size, size)
+            image = sar.read([1, 2], window=window, masked=True)
+            mask = reference.read(1, window=window, masked=True)
+        x = image.astype(np.float32).filled(np.nan)
+        y = mask.filled(-1).astype(np.int16)
+        valid = np.isin(y, [0, 1]) & np.isfinite(x).all(axis=0)
+        valid &= (x > -1000).all(axis=0)
+        x = np.nan_to_num(x, nan=-50.0, neginf=-50.0, posinf=5.0)
+        x = (np.clip(x, -50.0, 5.0) + 50.0) / 55.0
+        x[:, ~valid] = 0.0
+        y = np.where(valid, y, 0).astype(np.float32)[None]
+        valid = valid.astype(np.float32)[None]
+        return (torch.from_numpy(x.copy()),
+                torch.from_numpy(y.copy()),
+                torch.from_numpy(valid.copy()))
+
+
+class BalancedGoldWeakBatchSampler(Sampler):
+    """Una pasada por TODAS las imágenes débiles en cada época.
+
+    Cada lote combina aprox. 50% doradas (con reemplazo) y 50% débiles.
+    Por ello cada muestra débil se usa exactamente una vez por época;
+    las doradas se repiten para no quedar ignoradas por el gran desbalance.
+    """
+
+    def __init__(self, gold_count, weak_count, batch_size=8, seed=42):
+        if gold_count < 1 or weak_count < 1:
+            raise ValueError("Se requieren muestras doradas y débiles")
+        if batch_size < 2 or batch_size % 2:
+            raise ValueError("batch-size debe ser PAR y >= 2")
+        self.gold_count = gold_count
+        self.weak_count = weak_count
+        self.weak_per_batch = batch_size // 2
+        self.seed = seed
+        self.current_epoch = 0
+
+    def set_epoch(self, epoch):
+        self.current_epoch = epoch
+
+    def __iter__(self):
+        rng = random.Random(self.seed + self.current_epoch)
+        weak_indices = list(range(self.gold_count, self.gold_count + self.weak_count))
+        rng.shuffle(weak_indices)
+        for pos in range(0, len(weak_indices), self.weak_per_batch):
+            weak_batch = weak_indices[pos:pos + self.weak_per_batch]
+            gold_batch = [rng.randrange(self.gold_count) for _ in weak_batch]
+            batch = gold_batch + weak_batch
+            rng.shuffle(batch)
+            yield batch
+
+    def __len__(self):
+        return math.ceil(self.weak_count / self.weak_per_batch)
+

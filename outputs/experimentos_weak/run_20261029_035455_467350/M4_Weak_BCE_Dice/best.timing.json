@@ -1,0 +1,12 @@
+{
+  "tiempo_sesion_s": 2113.3,
+  "epocas_ejecutadas_en_sesion": 8,
+  "mejor_epoca": 3,
+  "mejor_iou_valid": 0.5791375718056861,
+  "tiempo_epocas_acumulado_s": 2112.99,
+  "cuentas": {
+    "gold": 252,
+    "weak": 2048,
+    "valid_gold": 89
+  }
+}

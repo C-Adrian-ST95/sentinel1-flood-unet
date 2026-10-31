@@ -1,0 +1,5 @@
+﻿modelo,checkpoint,segundos_inferencia,ventanas,pixeles_SAR_validos,pixeles_agua_predicha,referencia,evaluacion_cuantitativa,iou_global,iou_media_chips,f1_agua,precision_agua,recall_agua,tp,fp,tn,fn,pixeles_evaluados
+M1_BCE,D:\maestria\sentinel1-flood-unet\outputs\experimentos_gold\run_20261029_013146_547224\M1_BCE\best.pt,2.14,80,9960850,822977,Sin referencia,False,,,,,,,,,,
+M2_BCE_Dice,D:\maestria\sentinel1-flood-unet\outputs\experimentos_gold\run_20261029_013146_547224\M2_BCE_Dice\best.pt,1.93,80,9960850,20095,Sin referencia,False,,,,,,,,,,
+M3_Weak_BCE,D:\maestria\sentinel1-flood-unet\outputs\experimentos_weak\run_20261029_035455_467350\M3_Weak_BCE\best.pt,1.74,80,9960850,78291,Sin referencia,False,,,,,,,,,,
+M4_Weak_BCE_Dice,D:\maestria\sentinel1-flood-unet\outputs\experimentos_weak\run_20261029_035455_467350\M4_Weak_BCE_Dice\best.pt,2.09,80,9960850,26610,Sin referencia,False,,,,,,,,,,

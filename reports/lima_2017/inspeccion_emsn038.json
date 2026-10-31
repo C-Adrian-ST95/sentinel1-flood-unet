@@ -1,0 +1,3437 @@
+{
+  "observacion": "Una capa de poligonos de inundacion sola NO define las zonas negativas. Debe verificarse una capa de cobertura cartografiada. Potential_Maximum_flood indica maximo potencial, no necesariamente inundacion observada.",
+  "lector": "pyogrio",
+  "gdb": "data\\raw\\lima_2017\\emsn038\\EMSN038_UTM18S_v0.gdb",
+  "sar": {
+    "ruta": "data\\processed\\lima_2017\\final\\lima_20170317_VV_VH_dB.tif",
+    "crs": "EPSG:32718",
+    "bbox": [
+      265184.2746183737,
+      8666725.333639825,
+      299224.2746183737,
+      8699595.333639825
+    ],
+    "resolucion_m": [
+      10.0,
+      10.0
+    ],
+    "ancho": 3404,
+    "alto": 3287
+  },
+  "capas": [
+    {
+      "nombre": "ElevP",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 26,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "BEL": "float64",
+        "ELA": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ZVH": "float64",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object"
+      },
+      "bbox_origen": [
+        264766.1085000001,
+        8664536.8009,
+        312805.31599999964,
+        8706161.3103
+      ],
+      "bbox_en_crs_sar": [
+        264766.1085000001,
+        8664536.8009,
+        312805.31599999964,
+        8706161.3103
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 26,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "CA030"
+        ],
+        "BEL": [
+          -32767.0
+        ],
+        "ELA": [
+          0
+        ],
+        "NAM": [
+          "UNK"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "ZVH": [
+          1872.0,
+          1421.0,
+          1679.0,
+          1345.0,
+          1488.0,
+          1672.0,
+          1764.0,
+          1870.0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ]
+      }
+    },
+    {
+      "nombre": "ContourL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 2368,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "HQC": "int32",
+        "ZVH": "float64",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        258429.0109000001,
+        8663199.3223,
+        312840.8492999999,
+        8707960.0861
+      ],
+      "bbox_en_crs_sar": [
+        258429.0109000001,
+        8663199.3223,
+        312840.8492999999,
+        8707960.0861
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "CA010"
+        ],
+        "HQC": [
+          2,
+          1
+        ],
+        "ZVH": [
+          1320.0,
+          760.0,
+          660.0,
+          1480.0,
+          1140.0,
+          1400.0,
+          1240.0,
+          1100.0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          1662.843812545775,
+          1848.9501489849524,
+          600.5100204969054,
+          110.53551078237035,
+          328.49574720436107,
+          77.34846044371034,
+          6194.483709027233,
+          69460.37119013148
+        ]
+      }
+    },
+    {
+      "nombre": "BuiltupP",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 177,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "BAC": "int32",
+        "FUC": "int32",
+        "FUN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ORD": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object"
+      },
+      "bbox_origen": [
+        261756.3013000004,
+        8663310.779,
+        311733.65830000024,
+        8707984.0548
+      ],
+      "bbox_en_crs_sar": [
+        261756.3013000004,
+        8663310.779,
+        311733.65830000024,
+        8707984.0548
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 177,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AL020"
+        ],
+        "BAC": [
+          0
+        ],
+        "FUC": [
+          0
+        ],
+        "FUN": [
+          0
+        ],
+        "NAM": [
+          "Callao",
+          "Pasamayo",
+          "Yangas",
+          "San Miguel",
+          "San Juan de Lurigancho",
+          "Santo Domingo",
+          "Urb. Augusto Bedoya",
+          "Carmen de la Legua Reynoso"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "ORD": [
+          4,
+          3,
+          5,
+          1
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "OSM"
+        ],
+        "SRT": [
+          92
+        ],
+        "TXT": [
+          "suburb",
+          "village",
+          "hamlet",
+          "neighbourhood",
+          "city"
+        ]
+      }
+    },
+    {
+      "nombre": "BridgeL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 0,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "BOT": "int32",
+        "BSC": "int32",
+        "FUN": "int32",
+        "MCC": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "NOS": "int32",
+        "OHB": "float64",
+        "TRS": "int32",
+        "VOI": "object",
+        "WD1": "float64",
+        "WID": "float64",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": null,
+      "bbox_en_crs_sar": null,
+      "bbox_intersecta_sar": null,
+      "entidades_muestreadas": 0,
+      "valores_ejemplo": {}
+    },
+    {
+      "nombre": "LULC",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 41243,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "LULC": "float64",
+        "NAM": "object",
+        "NAM_INFO": "object",
+        "TXT": "object",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "datetime64[ms]",
+        "SDP": "object",
+        "SRT": "int32",
+        "LULC_UA_DESC": "object",
+        "AREA_HA": "float64",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        258082.7912999997,
+        8663198.4417,
+        312841.3524000002,
+        8707960.2106
+      ],
+      "bbox_en_crs_sar": [
+        258082.7912999997,
+        8663198.4417,
+        312841.3524000002,
+        8707960.2106
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          1
+        ],
+        "LULC": [
+          111.0
+        ],
+        "NAM": [
+          "Continuous urban fabric"
+        ],
+        "NAM_INFO": [
+          "UNK"
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          "NaT"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "LULC_UA_DESC": [
+          null
+        ],
+        "AREA_HA": [
+          0.028264033978602707,
+          0.09198878808473303,
+          0.054245410273966135,
+          0.06313390133237495,
+          0.06605250474311172,
+          0.04897294287427801,
+          0.08949374942210833,
+          0.11705588705551292
+        ],
+        "SHAPE_Length": [
+          186.59622286078957,
+          513.175201659858,
+          180.9007556920123,
+          185.47914553481374,
+          197.31009187843603,
+          134.85144809837934,
+          244.16117256437408,
+          262.3353900389226
+        ],
+        "SHAPE_Area": [
+          282.6401741387033,
+          919.8917352943874,
+          542.4557158016084,
+          631.3373787309148,
+          660.523378864693,
+          489.7288114282065,
+          894.9384758143092,
+          1170.5573273085247
+        ]
+      }
+    },
+    {
+      "nombre": "RoadL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 36153,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "CON": "int32",
+        "FUN": "int32",
+        "HCT": "int32",
+        "LOC": "int32",
+        "LTN": "int32",
+        "MES": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "RST": "int32",
+        "SEP": "int32",
+        "WD1": "float64",
+        "WTC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "buf_wid": "float32",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        258429.40130000003,
+        8663164.8176,
+        312812.5647,
+        8707899.3687
+      ],
+      "bbox_en_crs_sar": [
+        258429.40130000003,
+        8663164.8176,
+        312812.5647,
+        8707899.3687
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AP030"
+        ],
+        "CON": [
+          998
+        ],
+        "FUN": [
+          6,
+          1
+        ],
+        "HCT": [
+          1,
+          2,
+          4
+        ],
+        "LOC": [
+          44,
+          45
+        ],
+        "LTN": [
+          -32767
+        ],
+        "MES": [
+          0
+        ],
+        "NAM": [
+          "UNK",
+          "Avenida del Pescador",
+          "Avenida Nicolas Arriola",
+          "Calle Los Gavilanes",
+          "Huamachuco",
+          "Calle 18",
+          "La Marina",
+          "Avenida Pedro Delgado"
+        ],
+        "NFI": [
+          "OSM"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "RST": [
+          1
+        ],
+        "SEP": [
+          0
+        ],
+        "WD1": [
+          -32767.0
+        ],
+        "WTC": [
+          1
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "buf_wid": [
+          null
+        ],
+        "SHAPE_Length": [
+          203.7748676236541,
+          102.36042894478003,
+          282.6504582561455,
+          288.33489554565546,
+          25.27245285520531,
+          77.59380406958624,
+          103.60704770449742,
+          84.2819349977219
+        ]
+      }
+    },
+    {
+      "nombre": "TrailL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 9712,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "WTC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        260624.57070000004,
+        8663305.9449,
+        312755.78809999954,
+        8705985.5004
+      ],
+      "bbox_en_crs_sar": [
+        260624.57070000004,
+        8663305.9449,
+        312755.78809999954,
+        8705985.5004
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AP050"
+        ],
+        "NAM": [
+          " "
+        ],
+        "NFI": [
+          "OSM"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "WTC": [
+          0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          95.14294528981843,
+          90.38822161096567,
+          96.34985155942998,
+          95.8546497900025,
+          97.40182091659548,
+          96.77868491708664,
+          99.1477891204566,
+          70.8620320751559
+        ]
+      }
+    },
+    {
+      "nombre": "WatrcrsL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 11157,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "CDA": "int32",
+        "HYP": "int32",
+        "LOC": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        260581.82519999985,
+        8663300.5588,
+        312840.5957000004,
+        8707958.3761
+      ],
+      "bbox_en_crs_sar": [
+        260581.82519999985,
+        8663300.5588,
+        312840.5957000004,
+        8707958.3761
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          2
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "BH140"
+        ],
+        "CDA": [
+          0
+        ],
+        "HYP": [
+          2
+        ],
+        "LOC": [
+          0
+        ],
+        "NAM": [
+          "UNK"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "ACC": [
+          2
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          "30/07/2017"
+        ],
+        "SDP": [
+          "Automatic extraction from ASTER GDEM"
+        ],
+        "SRT": [
+          999
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          524.1665522552369,
+          415.3440357590848,
+          1901.408175246235,
+          156.10264241829532,
+          424.56111703400074,
+          76.78889999911189,
+          363.6589712233495,
+          392.29946695033647
+        ]
+      }
+    },
+    {
+      "nombre": "TrackL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 2064,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "WD1": "float64",
+        "WTC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "buf_wid": "float32",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        259475.79779999983,
+        8663206.4155,
+        312807.94570000004,
+        8707739.6465
+      ],
+      "bbox_en_crs_sar": [
+        259475.79779999983,
+        8663206.4155,
+        312807.94570000004,
+        8707739.6465
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AP010"
+        ],
+        "NAM": [
+          "Faustino",
+          "Pj. Almeria",
+          "UNK",
+          "Cañete",
+          "Malecon Chillon",
+          "Pasaje La Unión",
+          "Pasaje 2"
+        ],
+        "NFI": [
+          "OSM",
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "WD1": [
+          -32767.0
+        ],
+        "WTC": [
+          0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "track",
+          "path",
+          "N_A"
+        ],
+        "buf_wid": [
+          null
+        ],
+        "SHAPE_Length": [
+          252.75754463991987,
+          50.160725201609374,
+          49.74902189220101,
+          8.906590095789438,
+          170.36152835608226,
+          139.83870917576664,
+          245.1160965172191,
+          50.3589130933169
+        ]
+      }
+    },
+    {
+      "nombre": "TunnelL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 0,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "FUN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "TRS": "int32",
+        "WID": "float64",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": null,
+      "bbox_en_crs_sar": null,
+      "bbox_intersecta_sar": null,
+      "entidades_muestreadas": 0,
+      "valores_ejemplo": {}
+    },
+    {
+      "nombre": "AerofacA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 1,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "CAA": "int32",
+        "COD": "int32",
+        "FPT": "int32",
+        "FUN": "int32",
+        "IKO": "object",
+        "NAM": "object",
+        "ZVA": "float64",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        268788.9321999997,
+        8668207.7532,
+        271404.18180000037,
+        8672337.4707
+      ],
+      "bbox_en_crs_sar": [
+        268788.9321999997,
+        8668207.7532,
+        271404.18180000037,
+        8672337.4707
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 1,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "GB005"
+        ],
+        "CAA": [
+          16
+        ],
+        "COD": [
+          1001
+        ],
+        "FPT": [
+          1
+        ],
+        "FUN": [
+          6
+        ],
+        "IKO": [
+          "SPJC"
+        ],
+        "NAM": [
+          "Jorge Chávez International Airport"
+        ],
+        "ZVA": [
+          34.0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          39479.850126533216
+        ],
+        "SHAPE_Area": [
+          3697621.0077700657
+        ]
+      }
+    },
+    {
+      "nombre": "BuiltupA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 437,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "BAC": "int32",
+        "FUC": "int32",
+        "FUN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ORD": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "HTYP": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        259271.7982999999,
+        8663300.1168,
+        312759.38719999976,
+        8707823.4781
+      ],
+      "bbox_en_crs_sar": [
+        259271.7982999999,
+        8663300.1168,
+        312759.38719999976,
+        8707823.4781
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0,
+          1
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AL020",
+          "AL208"
+        ],
+        "BAC": [
+          2,
+          1,
+          -32768
+        ],
+        "FUC": [
+          4,
+          -32768
+        ],
+        "FUN": [
+          6
+        ],
+        "NAM": [
+          "UNK"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "ORD": [
+          0,
+          -32768
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "Urban",
+          "Suburban",
+          "Rural",
+          "N_A"
+        ],
+        "HTYP": [
+          null
+        ],
+        "SHAPE_Length": [
+          315.8741392801634,
+          1364.9437431376114,
+          745.8790979866776,
+          2399.8491568510244,
+          4905.068088290891,
+          771.3782975187772,
+          1390.228383781102,
+          2012.458130207876
+        ],
+        "SHAPE_Area": [
+          6054.314315198162,
+          104323.21314459156,
+          34646.80298900175,
+          140497.57933571946,
+          663974.7525989169,
+          27727.422075290946,
+          40833.82724151737,
+          137761.11358936506
+        ]
+      }
+    },
+    {
+      "nombre": "MiscpopA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 0,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "FFN": "int32",
+        "FUC": "int32",
+        "FUN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "BUSE": "float64",
+        "HTYP": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": null,
+      "bbox_en_crs_sar": null,
+      "bbox_intersecta_sar": null,
+      "entidades_muestreadas": 0,
+      "valores_ejemplo": {}
+    },
+    {
+      "nombre": "RailrdL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 49,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "FUN": "int32",
+        "GAW": "float64",
+        "LOC": "int32",
+        "LTN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "RGC": "int32",
+        "RIR": "int32",
+        "RRA": "int32",
+        "RRC": "int32",
+        "RSA": "int32",
+        "RTA": "int32",
+        "RWC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        266017.14350000024,
+        8662879.6171,
+        313249.92229999974,
+        8678241.1734
+      ],
+      "bbox_en_crs_sar": [
+        266017.14350000024,
+        8662879.6171,
+        313249.92229999974,
+        8678241.1734
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 49,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          " "
+        ],
+        "FUN": [
+          0
+        ],
+        "GAW": [
+          0.0
+        ],
+        "LOC": [
+          0
+        ],
+        "LTN": [
+          0
+        ],
+        "NAM": [
+          " ",
+          "Faja transportadora de minerales"
+        ],
+        "NFI": [
+          " "
+        ],
+        "NFN": [
+          " "
+        ],
+        "RGC": [
+          0
+        ],
+        "RIR": [
+          0
+        ],
+        "RRA": [
+          0
+        ],
+        "RRC": [
+          0
+        ],
+        "RSA": [
+          0
+        ],
+        "RTA": [
+          0
+        ],
+        "RWC": [
+          0
+        ],
+        "ACC": [
+          0
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          null
+        ],
+        "SDP": [
+          null
+        ],
+        "SRT": [
+          null
+        ],
+        "TXT": [
+          "rail",
+          "abandoned",
+          "subway",
+          "turntable",
+          "disused",
+          "monorail"
+        ],
+        "SHAPE_Length": [
+          617.965479839491,
+          1056.4725125856253,
+          333.6623365529196,
+          339.1416918879242,
+          2051.273324461309,
+          504.1393925441589,
+          118.67288776839358,
+          98.56797317496473
+        ]
+      }
+    },
+    {
+      "nombre": "WatrcrsA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 2,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "CDA": "int32",
+        "FUN": "int32",
+        "HYP": "int32",
+        "LOC": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "TID": "int32",
+        "WCC": "int32",
+        "WST": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        266195.7697999999,
+        8667731.2102,
+        313249.2988999998,
+        8707822.4052
+      ],
+      "bbox_en_crs_sar": [
+        266195.7697999999,
+        8667731.2102,
+        313249.2988999998,
+        8707822.4052
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 2,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          2
+        ],
+        "GFID": [
+          "A8DFA759-0FBC-4C25-96FD-95AE57CC588B",
+          "69F1C780-149F-41E0-BB4B-CBB35354FDCC"
+        ],
+        "F_CODE": [
+          "BH140"
+        ],
+        "CDA": [
+          0
+        ],
+        "FUN": [
+          0
+        ],
+        "HYP": [
+          0
+        ],
+        "LOC": [
+          0
+        ],
+        "NAM": [
+          "Rimac River",
+          "Chillon River"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          " "
+        ],
+        "TID": [
+          0
+        ],
+        "WCC": [
+          0
+        ],
+        "WST": [
+          0
+        ],
+        "ACC": [
+          0
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          null
+        ],
+        "SDP": [
+          null
+        ],
+        "SRT": [
+          null
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          102897.92260546253,
+          83753.94912433243
+        ],
+        "SHAPE_Area": [
+          3405534.854862142,
+          2282990.8470749464
+        ]
+      }
+    },
+    {
+      "nombre": "Admin_MINAM_LIM_PROVINCIA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 197,
+      "crs": "EPSG:32718",
+      "campos": {
+        "COUNT": "float64",
+        "FIRST_IDPR": "object",
+        "NOMBPROV": "object",
+        "FIRST_NOMB": "object",
+        "LAST_DCTO": "object",
+        "LAST_LEY": "object",
+        "FIRST_FECH": "object",
+        "LAST_FECHA": "object",
+        "MIN_SHAPE_": "float64",
+        "ha": "float64",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_en_crs_sar": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 197,
+      "valores_ejemplo": {
+        "COUNT": [
+          9.0,
+          8.0,
+          7.0,
+          5.0,
+          6.0,
+          19.0,
+          12.0,
+          29.0
+        ],
+        "FIRST_IDPR": [
+          "0301",
+          "0902",
+          "0802",
+          "0202",
+          "1602",
+          "1002",
+          "0302",
+          "0903"
+        ],
+        "NOMBPROV": [
+          "ABANCAY",
+          "ACOBAMBA",
+          "ACOMAYO",
+          "AIJA",
+          "ALTO AMAZONAS",
+          "AMBO",
+          "ANDAHUAYLAS",
+          "ANGARAES"
+        ],
+        "FIRST_NOMB": [
+          "APURIMAC",
+          "HUANCAVELICA",
+          "CUSCO",
+          "ANCASH",
+          "LORETO",
+          "HUANUCO",
+          "AREQUIPA",
+          "LA LIBERTAD"
+        ],
+        "LAST_DCTO": [
+          "LEY",
+          "DEC.",
+          "-",
+          "L.R.",
+          "D.L.",
+          "--"
+        ],
+        "LAST_LEY": [
+          "S/N",
+          "5292",
+          "8188",
+          "9165",
+          "9910",
+          "9354",
+          "13677",
+          "15187"
+        ],
+        "FIRST_FECH": [
+          "28/12/1961",
+          "23/11/1925",
+          "11/11/1964",
+          "21/12/1907",
+          "08/09/1964",
+          "21/09/1943",
+          "EPOCA INDEP.",
+          "30/10/1984"
+        ],
+        "LAST_FECHA": [
+          "21/11/1893",
+          "23/11/1925",
+          "02/01/1857",
+          "05/03/1936",
+          "05/09/1940",
+          "20/01/1944",
+          "28/02/1941",
+          "14/11/1896"
+        ],
+        "MIN_SHAPE_": [
+          345827.336243,
+          92636.7425352,
+          93285.8080742,
+          69639.6314397,
+          1917212.65818,
+          157735.850657,
+          403553.439719,
+          194061.71484
+        ],
+        "ha": [
+          345827.34,
+          92636.74,
+          93285.81,
+          69639.63,
+          1917212.66,
+          157735.85,
+          403553.44,
+          194061.71
+        ],
+        "Shape_Length": [
+          386656.00559163926,
+          192950.811593424,
+          178227.51923377605,
+          173671.46787957725,
+          1039228.7717347181,
+          260909.73883976176,
+          430038.9773441461,
+          291608.8863795053
+        ],
+        "Shape_Area": [
+          3458273369.7748904,
+          926367426.2345243,
+          932858080.3780221,
+          696396313.4503798,
+          19172126581.51344,
+          1577358508.0124295,
+          4035534397.07957,
+          1940617144.7357016
+        ]
+      }
+    },
+    {
+      "nombre": "Admin_MINAM_BAS_LIM_DISTRITOS",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 1834,
+      "crs": "EPSG:32718",
+      "campos": {
+        "OBJECTID": "int32",
+        "IDDIST": "object",
+        "IDDPTO": "object",
+        "IDPROV": "object",
+        "NOMBDIST": "object",
+        "NOMBPROV": "object",
+        "NOMBDEP": "object",
+        "DCTO": "object",
+        "LEY": "object",
+        "FECHA": "object",
+        "NOM_CAP": "object",
+        "SHAPE_LENG": "float64",
+        "SHAPE_LE_1": "float64",
+        "SHAPE_AR_1": "float64",
+        "AREA_MINAM": "float64",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_en_crs_sar": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "OBJECTID": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "IDDIST": [
+          "230110",
+          "230108",
+          "230103",
+          "230101",
+          "230109",
+          "230104",
+          "230303",
+          "180301"
+        ],
+        "IDDPTO": [
+          "23",
+          "18",
+          "04",
+          "21",
+          "05"
+        ],
+        "IDPROV": [
+          "2301",
+          "2303",
+          "1803",
+          "2304",
+          "2302",
+          "1801",
+          "0407",
+          "2105"
+        ],
+        "NOMBDIST": [
+          "CORONEL GREGORIO ALBARRACIN LANCHIPA",
+          "POCOLLAY",
+          "CALANA",
+          "TACNA",
+          "SAMA",
+          "CIUDAD NUEVA",
+          "ITE",
+          "ILO"
+        ],
+        "NOMBPROV": [
+          "TACNA",
+          "JORGE BASADRE",
+          "ILO",
+          "TARATA",
+          "CANDARAVE",
+          "MARISCAL NIETO",
+          "ISLAY",
+          "EL COLLAO"
+        ],
+        "NOMBDEP": [
+          "TACNA",
+          "MOQUEGUA",
+          "AREQUIPA",
+          "PUNO",
+          "AYACUCHO"
+        ],
+        "DCTO": [
+          "LEY",
+          "-",
+          "DEC.",
+          "D.L.",
+          "L.R.",
+          "--"
+        ],
+        "LEY": [
+          "27415",
+          "13069",
+          "S/N",
+          "-",
+          "25851",
+          "13660",
+          "23828",
+          "12539"
+        ],
+        "FECHA": [
+          "02/02/2001",
+          "15/01/1959",
+          "20/08/1872",
+          "EPOCA INDEP.",
+          "16/11/1992",
+          "12/06/1961",
+          "09/05/1984",
+          "02/01/1857"
+        ],
+        "NOM_CAP": [
+          "ALFONSO UGARTE",
+          "POCOLLAY",
+          "CALANA",
+          "TACNA",
+          "LAS YARAS",
+          "CIUDAD NUEVA",
+          "ITE",
+          "ILO"
+        ],
+        "SHAPE_LENG": [
+          0.570509667,
+          0.88387113586,
+          0.44673612779,
+          2.75895077675,
+          1.51550618813,
+          0.75556465325,
+          1.34012922335,
+          0.89764507416
+        ],
+        "SHAPE_LE_1": [
+          0.57019506331,
+          0.89716941106,
+          0.44596324113,
+          2.75812315995,
+          1.51365992277,
+          0.75547155,
+          1.33819059571,
+          0.89643843952
+        ],
+        "SHAPE_AR_1": [
+          0.01598980139,
+          0.02296138198,
+          0.00938256462,
+          0.20917685563,
+          0.09676577454,
+          0.01521357899,
+          0.07032620594,
+          0.02494765144
+        ],
+        "AREA_MINAM": [
+          18834.14,
+          27073.52,
+          11063.99,
+          246365.27,
+          113953.51,
+          17947.46,
+          82836.88,
+          29381.93
+        ],
+        "Shape_Length": [
+          61748.418542266205,
+          96776.47621529347,
+          48186.97069862365,
+          297942.0164976411,
+          163782.28847363158,
+          82604.51836397428,
+          145031.72445739093,
+          96861.65304320426
+        ],
+        "Shape_Area": [
+          188341446.0238706,
+          270735204.3509771,
+          110639869.9598072,
+          2463652667.613098,
+          1139535122.9569423,
+          179474634.4682923,
+          828368846.2913322,
+          293819275.10968214
+        ]
+      }
+    },
+    {
+      "nombre": "Admin_MINAM_BAS_LIM_DEPARTAMENTO",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 25,
+      "crs": "EPSG:32718",
+      "campos": {
+        "NOMBDEP": "object",
+        "COUNT": "float64",
+        "FIRST_IDDP": "object",
+        "HECTARES": "float64",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_en_crs_sar": [
+        -203260.78969999962,
+        7964768.9116,
+        1190990.7660999997,
+        9995732.8584
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 25,
+      "valores_ejemplo": {
+        "NOMBDEP": [
+          "AMAZONAS",
+          "ANCASH",
+          "APURIMAC",
+          "AREQUIPA",
+          "AYACUCHO",
+          "CAJAMARCA",
+          "CALLAO",
+          "CUSCO"
+        ],
+        "COUNT": [
+          84.0,
+          166.0,
+          80.0,
+          109.0,
+          111.0,
+          127.0,
+          6.0,
+          108.0
+        ],
+        "FIRST_IDDP": [
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08"
+        ],
+        "HECTARES": [
+          3930646.567,
+          3596224.6,
+          2111415.17,
+          6325588.935,
+          4350381.783,
+          3304465.549,
+          14140.954,
+          7207614.24
+        ],
+        "Shape_Length": [
+          1430016.849693668,
+          1268340.2219803887,
+          845630.4743108317,
+          1892004.0643436927,
+          1872656.5429113884,
+          1371161.736183172,
+          114682.86758525856,
+          2392369.0375340115
+        ],
+        "Shape_Area": [
+          39306465675.16368,
+          35962245996.01534,
+          21114151690.306576,
+          63255889344.987175,
+          43503817833.61687,
+          33044655482.520626,
+          141409543.51675,
+          72076142393.698
+        ]
+      }
+    },
+    {
+      "nombre": "EMSN038_AOI",
+      "tipo_geometria": "MultiPolygon Z",
+      "cantidad_entidades": 1,
+      "crs": "EPSG:32718",
+      "campos": {
+        "Name": "object",
+        "descriptio": "object",
+        "timestamp": "object",
+        "begin": "object",
+        "end": "object",
+        "altitudeMo": "object",
+        "tessellate": "float64",
+        "extrude": "float64",
+        "visibility": "float64",
+        "drawOrder": "float64",
+        "icon": "object",
+        "title": "object",
+        "scale": "object",
+        "format": "object",
+        "orientatio": "object",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        258082.7912999997,
+        8663198.4417,
+        312841.3524000002,
+        8707960.2106
+      ],
+      "bbox_en_crs_sar": [
+        258082.7912999997,
+        8663198.4417,
+        312841.3524000002,
+        8707960.2106
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 1,
+      "valores_ejemplo": {
+        "Name": [
+          "Map"
+        ],
+        "descriptio": [
+          "1: 79820\n"
+        ],
+        "timestamp": [
+          " "
+        ],
+        "begin": [
+          " "
+        ],
+        "end": [
+          " "
+        ],
+        "altitudeMo": [
+          " "
+        ],
+        "tessellate": [
+          -1.0
+        ],
+        "extrude": [
+          0.0
+        ],
+        "visibility": [
+          -1.0
+        ],
+        "drawOrder": [
+          0.0
+        ],
+        "icon": [
+          " "
+        ],
+        "title": [
+          "Map"
+        ],
+        "scale": [
+          "79820"
+        ],
+        "format": [
+          "A1"
+        ],
+        "orientatio": [
+          "landscape"
+        ],
+        "Shape_Length": [
+          197646.183760414
+        ],
+        "Shape_Area": [
+          2416157196.97717
+        ]
+      }
+    },
+    {
+      "nombre": "LakeresA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 542,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "FUN": "int32",
+        "HYP": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "SCC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        265242.44120000023,
+        8662868.2859,
+        311489.66810000036,
+        8694247.3169
+      ],
+      "bbox_en_crs_sar": [
+        265242.44120000023,
+        8662868.2859,
+        311489.66810000036,
+        8694247.3169
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          "BD371077-D47D-4A36-A9DA-D5F08DA96795",
+          "472BDDED-C336-4419-9489-05B5B6B42FCD",
+          "CB7A42AD-A521-4617-BAE3-DE162A5F1B39",
+          "142FF765-64BD-464E-827D-D90B5CB9C6D8",
+          "AB95AC38-6F6E-479D-B02E-50CEFA67393E",
+          "1455B02A-6961-4214-A437-C2190B3E9A04",
+          "6C113636-A151-4929-8046-5409B83BED72",
+          "4E2066AF-C078-42F7-83BC-91A3323F02DA"
+        ],
+        "F_CODE": [
+          "BH080"
+        ],
+        "FUN": [
+          -32768
+        ],
+        "HYP": [
+          2
+        ],
+        "NAM": [
+          "UNK"
+        ],
+        "NFI": [
+          "OSM"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "SCC": [
+          0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "water"
+        ],
+        "SHAPE_Length": [
+          693.2904426454372,
+          79.0962229813128,
+          102.59305890605931,
+          83.20524137944011,
+          226.46823806009334,
+          283.30416188802366,
+          38.986063999449634,
+          41.157390567215195
+        ],
+        "SHAPE_Area": [
+          24206.251568723983,
+          393.8131731890234,
+          562.8572692911856,
+          256.3953709963973,
+          469.13816428741376,
+          2469.2064622162925,
+          119.83128367993335,
+          115.95835279763602
+        ]
+      }
+    },
+    {
+      "nombre": "CoastL",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 2,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "SLT": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        260258.28259999957,
+        8662148.6993,
+        273138.1188000003,
+        8708415.6375
+      ],
+      "bbox_en_crs_sar": [
+        260258.28259999957,
+        8662148.6993,
+        273138.1188000003,
+        8708415.6375
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 2,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          " "
+        ],
+        "SLT": [
+          0
+        ],
+        "ACC": [
+          0
+        ],
+        "CCN": [
+          null
+        ],
+        "SDV": [
+          null
+        ],
+        "SDP": [
+          null
+        ],
+        "SRT": [
+          null
+        ],
+        "TXT": [
+          " "
+        ],
+        "SHAPE_Length": [
+          74.64600084638616,
+          93307.796202456
+        ]
+      }
+    },
+    {
+      "nombre": "CoastA",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 1,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "NA2": "object",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "SMC": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        256768.37700000033,
+        8661991.0873,
+        273138.1188000003,
+        8708415.6375
+      ],
+      "bbox_en_crs_sar": [
+        256768.37700000033,
+        8661991.0873,
+        273138.1188000003,
+        8708415.6375
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 1,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          1
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "BA040"
+        ],
+        "NA2": [
+          "UNK"
+        ],
+        "NAM": [
+          "UNK"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "SMC": [
+          -32768
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "N_A"
+        ],
+        "SHAPE_Length": [
+          159357.07180380853
+        ],
+        "SHAPE_Area": [
+          363735273.8495505
+        ]
+      }
+    },
+    {
+      "nombre": "River_Basins_MINAM",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 5,
+      "crs": "EPSG:32718",
+      "campos": {
+        "ID": "int32",
+        "NIVEL1": "object",
+        "NIVEL2": "object",
+        "NIVEL3": "object",
+        "NIVEL4": "object",
+        "NIVEL5": "object",
+        "NIVEL6": "object",
+        "NIVEL7": "object",
+        "NOMB_UH_N1": "object",
+        "NOMB_UH_N2": "object",
+        "NOMB_UH_N3": "object",
+        "NOMB_UH_N4": "object",
+        "NOMB_UH_N5": "object",
+        "NOMB_UH_N6": "object",
+        "NOMB_UH_N7": "object",
+        "CODIGO": "object",
+        "NOMBRE": "object",
+        "NIVEL": "int16",
+        "ORDEN": "int32",
+        "AREA_KM2": "float64",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        254969.59580000024,
+        8642543.9417,
+        385711.4132000003,
+        8749052.3931
+      ],
+      "bbox_en_crs_sar": [
+        254969.59580000024,
+        8642543.9417,
+        385711.4132000003,
+        8749052.3931
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 5,
+      "valores_ejemplo": {
+        "ID": [
+          66,
+          68,
+          67,
+          65,
+          63
+        ],
+        "NIVEL1": [
+          "1"
+        ],
+        "NIVEL2": [
+          "13"
+        ],
+        "NIVEL3": [
+          "137"
+        ],
+        "NIVEL4": [
+          "1375"
+        ],
+        "NIVEL5": [
+          "13755"
+        ],
+        "NIVEL6": [
+          "137555",
+          "137557",
+          "137556",
+          "137554",
+          "137553"
+        ],
+        "NIVEL7": [
+          " ",
+          "1375534"
+        ],
+        "NOMB_UH_N1": [
+          "Region Hidrografica del Pacifico"
+        ],
+        "NOMB_UH_N2": [
+          "Unidad Hidrografica 13"
+        ],
+        "NOMB_UH_N3": [
+          "Unidad Hidrografica 137"
+        ],
+        "NOMB_UH_N4": [
+          "Unidad Hidrografica 1375"
+        ],
+        "NOMB_UH_N5": [
+          "Unidad Hidrografica 13755",
+          "Unidad Hidrografica  13755"
+        ],
+        "NOMB_UH_N6": [
+          "Unidad Hidrografica 137555",
+          "Unidad Hidrografica 137557",
+          "Chillón",
+          "Rimac",
+          "Unidad Hidrografica 137553"
+        ],
+        "NOMB_UH_N7": [
+          " ",
+          "Lurín"
+        ],
+        "CODIGO": [
+          "137555",
+          "137557",
+          "137556",
+          "137554",
+          "1375534"
+        ],
+        "NOMBRE": [
+          "Intercuenca 137555",
+          "Intercuenca 137557",
+          "Cuenca Chillón",
+          "Cuenca Rimac",
+          "Cuenca Lurín"
+        ],
+        "NIVEL": [
+          6,
+          7
+        ],
+        "ORDEN": [
+          999,
+          32,
+          31,
+          30
+        ],
+        "AREA_KM2": [
+          76.0618,
+          377.7568,
+          2210.513,
+          3485.3575,
+          1633.8095
+        ],
+        "Shape_Length": [
+          41465.64610255757,
+          126772.34749831796,
+          306091.5847321629,
+          419586.65355861624,
+          252551.1783092014
+        ],
+        "Shape_Area": [
+          76467854.81348361,
+          379773685.3054374,
+          2222315011.2427516,
+          3503965683.9959993,
+          1642532690.2306252
+        ]
+      }
+    },
+    {
+      "nombre": "PoIs",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 826,
+      "crs": "EPSG:32718",
+      "campos": {
+        "osm_id": "float64",
+        "name": "object",
+        "Source": "object",
+        "name_EN": "object",
+        "POI_type": "object",
+        "POI_subtype": "object",
+        "ind": "int16"
+      },
+      "bbox_origen": [
+        261297.7279000003,
+        8663283.1424,
+        312073.55869999994,
+        8700437.8631
+      ],
+      "bbox_en_crs_sar": [
+        261297.7279000003,
+        8663283.1424,
+        312073.55869999994,
+        8700437.8631
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "osm_id": [
+          817017597.0,
+          817079360.0,
+          1302294151.0,
+          1305070461.0,
+          1306112936.0,
+          1367679434.0,
+          1459528357.0,
+          1620283966.0
+        ],
+        "name": [
+          "Iglesia de Testigos de Jehova",
+          "Policlinico San Pablo",
+          "Parroquia Nuestra Señora de la Esperanza",
+          "Iglesia de Jesucristo de los Santos de los Ultim",
+          "UNK",
+          "El Dinosaurio",
+          "Santo Cristo",
+          "Estación \"El Ángel\""
+        ],
+        "Source": [
+          "OSM",
+          "SPOT 7",
+          "Wikimapia"
+        ],
+        "name_EN": [
+          "Jehovah's Witness Church",
+          "Polyclinic San Pablo",
+          "Our Lady of Hope Parish",
+          "Church of Jesus Christ of Latter-day Saints",
+          "UNK",
+          "The dinosaur",
+          "Holy Christ",
+          "Station El Ángel"
+        ],
+        "POI_type": [
+          "Church/Place of Worship",
+          "Health Facility",
+          "Monument",
+          "Train station",
+          "Police",
+          "Hospital",
+          "Museum",
+          "Sport Facility"
+        ],
+        "POI_subtype": [
+          "Church/Place of Worship",
+          "Health Facility",
+          "Monument",
+          "Train station",
+          "Police",
+          "Hospital",
+          "Museum",
+          "Sport Facility"
+        ],
+        "ind": [
+          null
+        ]
+      }
+    },
+    {
+      "nombre": "Industry_Utilitiy_P",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 782,
+      "crs": "EPSG:32718",
+      "campos": {
+        "osm_id": "float64",
+        "name": "object",
+        "Source": "object",
+        "name_EN": "object",
+        "POI_type": "object",
+        "POI_subtype": "object"
+      },
+      "bbox_origen": [
+        262101.50679999962,
+        8663024.2805,
+        310906.26939999964,
+        8701150.5504
+      ],
+      "bbox_en_crs_sar": [
+        262101.50679999962,
+        8663024.2805,
+        310906.26939999964,
+        8701150.5504
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "osm_id": [
+          null,
+          1846311391.0,
+          821641421.0,
+          1304828434.0,
+          1305343463.0,
+          1689573879.0,
+          1689574020.0,
+          1689574129.0
+        ],
+        "name": [
+          "Cajamarquilla  Refinery",
+          "NEPTUNIA S.A. ",
+          "El Comercio",
+          "Molinera Santa Rosa ",
+          "Molinos Calcáreos",
+          "MOBIL Oil del Peru",
+          "Repsol La Pampilla",
+          "Planta de Almacenamiento de Gas Repsol YPF"
+        ],
+        "Source": [
+          "Wikimapia",
+          "OSM"
+        ],
+        "name_EN": [
+          "Cajamarquilla  Refinery",
+          "NEPTUNIA S.A.",
+          "El Comercio",
+          "Molinera Santa Rosa",
+          "Calcareous Mills",
+          "MOBIL Oil from Peru",
+          "Repsol La Pampilla",
+          "Repsol YPF Gas Storage Plant"
+        ],
+        "POI_type": [
+          "Industrial Site",
+          "Gas Station",
+          "Water Tower",
+          "Water Tank"
+        ],
+        "POI_subtype": [
+          "Oil/Gas Plant",
+          "Storage",
+          "Processing Facility",
+          "Gas Station",
+          "Water Tower",
+          "Water Tank"
+        ]
+      }
+    },
+    {
+      "nombre": "IslandP",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 14,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FCSubtype": "int32",
+        "GFID": "object",
+        "F_CODE": "object",
+        "BAC": "int32",
+        "FUC": "int32",
+        "FUN": "int32",
+        "NAM": "object",
+        "NFI": "object",
+        "NFN": "object",
+        "ORD": "int32",
+        "ACC": "int32",
+        "CCN": "object",
+        "SDV": "object",
+        "SDP": "object",
+        "SRT": "int32",
+        "TXT": "object"
+      },
+      "bbox_origen": [
+        257796.97410000023,
+        8662972.7889,
+        262108.20639999956,
+        8697242.5756
+      ],
+      "bbox_en_crs_sar": [
+        257796.97410000023,
+        8662972.7889,
+        262108.20639999956,
+        8697242.5756
+      ],
+      "bbox_intersecta_sar": false,
+      "entidades_muestreadas": 14,
+      "valores_ejemplo": {
+        "FCSubtype": [
+          0
+        ],
+        "GFID": [
+          " "
+        ],
+        "F_CODE": [
+          "AL020"
+        ],
+        "BAC": [
+          0
+        ],
+        "FUC": [
+          0
+        ],
+        "FUN": [
+          0
+        ],
+        "NAM": [
+          "Grande",
+          "Las Dos Hermanas",
+          "Mata Cuatro",
+          "San Lorenzo",
+          "San Pedro",
+          "Ventanillas",
+          "Isla"
+        ],
+        "NFI": [
+          "N_A"
+        ],
+        "NFN": [
+          "N_A"
+        ],
+        "ORD": [
+          0
+        ],
+        "ACC": [
+          1
+        ],
+        "CCN": [
+          "No copyright or restriction of rights of use is asserted by originator of this information."
+        ],
+        "SDV": [
+          "N_A"
+        ],
+        "SDP": [
+          "N_A"
+        ],
+        "SRT": [
+          0
+        ],
+        "TXT": [
+          "island"
+        ]
+      }
+    },
+    {
+      "nombre": "Schools",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 7228,
+      "crs": "EPSG:32718",
+      "campos": {
+        "COD_MOD": "object",
+        "ANEXO": "object",
+        "CEN_EDU": "object",
+        "NIV_MOD": "object",
+        "COD_CAR": "object",
+        "FORMAS": "object",
+        "TIPOICE": "object",
+        "TIPOPROG": "object",
+        "GES_DEP": "object",
+        "ESTADO": "object",
+        "REGISTRO": "object",
+        "CODLOCAL": "object",
+        "DIR_CEN": "object",
+        "CATCALLE": "object",
+        "REFERENCIA": "object",
+        "CODGEO": "object",
+        "CODOOII": "object",
+        "DRE_UGEL": "object",
+        "CODCP_MED": "object",
+        "CEN_POB": "object",
+        "NOMCPSIG": "object",
+        "CODCP_LUGA": "object",
+        "NOMLUGAR_U": "object",
+        "FUENTE_G": "object",
+        "N_ALUM": "float64",
+        "N_DOCENTES": "float64",
+        "CLONG_IE_D": "float64",
+        "CLAT_IE_DE": "float64",
+        "FTECOORDEN": "int32",
+        "NALT_LOCAL": "float64",
+        "N_main_build": "object",
+        "N_anc_build": "object",
+        "Upgrading_": "object",
+        "Budget_est": "object",
+        "Link_to_re": "object",
+        "Link_to_pr": "object",
+        "Source": "object"
+      },
+      "bbox_origen": [
+        262967.90110000037,
+        8663328.2848,
+        312299.2171,
+        8706548.6504
+      ],
+      "bbox_en_crs_sar": [
+        262967.90110000037,
+        8663328.2848,
+        312299.2171,
+        8706548.6504
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "COD_MOD": [
+          "3895178",
+          "1726678",
+          "0863936",
+          "0876300",
+          "0864249",
+          "0876516",
+          "0603696",
+          "0315499"
+        ],
+        "ANEXO": [
+          "0"
+        ],
+        "CEN_EDU": [
+          "SEÑOR DE LOS MILAGROS",
+          "CEBA - MIGUEL ANGEL ASTURIAS DE CARABAYLLO",
+          "EBEN EZER",
+          "MANUEL SCORZA TORRES",
+          "SANTA MARIA DE LA MERCED",
+          "0082 LA CANTUTA",
+          "133 FERNANDO LUNA DEMUTTI",
+          "004 NIÑO JESUS DE PRAGA"
+        ],
+        "NIV_MOD": [
+          "A5",
+          "D1",
+          "A2",
+          "A3",
+          "B0",
+          "F0",
+          "E2",
+          "L0"
+        ],
+        "COD_CAR": [
+          "a",
+          "3",
+          "2"
+        ],
+        "FORMAS": [
+          "N",
+          "a",
+          "S"
+        ],
+        "TIPOICE": [
+          " ",
+          "11"
+        ],
+        "TIPOPROG": [
+          "12",
+          " "
+        ],
+        "GES_DEP": [
+          "A1",
+          "B4",
+          "B2",
+          "A2",
+          "A4"
+        ],
+        "ESTADO": [
+          "1"
+        ],
+        "REGISTRO": [
+          "9",
+          "2",
+          "1"
+        ],
+        "CODLOCAL": [
+          "3895178",
+          "746429",
+          "332306",
+          "332405",
+          "332561",
+          "332151",
+          "332226",
+          "332146"
+        ],
+        "DIR_CEN": [
+          "PASAJE LAS AMERICAS MZ G-1 LOTE 25",
+          "MZ B LOTE 05-10",
+          "AVENIDA SAN JUAN 537",
+          "JIRON RIO CHIRA 443",
+          "AVENIDA SAN JUAN 596",
+          "AVENIDA MARISCAL SANTA CRUZ 165",
+          "JIRON LAS VIOLETAS CUADRA 2",
+          "JIRON SURUMANA"
+        ],
+        "CATCALLE": [
+          " ",
+          "1",
+          "3",
+          "2",
+          "9",
+          "4"
+        ],
+        "REFERENCIA": [
+          " "
+        ],
+        "CODGEO": [
+          "150103",
+          "150106",
+          "150134",
+          "150101",
+          "150102",
+          "150132",
+          "070106",
+          "150110"
+        ],
+        "CODOOII": [
+          "150107",
+          "150105",
+          "150108",
+          "150104",
+          "150106",
+          "070102"
+        ],
+        "DRE_UGEL": [
+          "ATE 06",
+          "COMAS 04",
+          "SAN BORJA 07",
+          "BREÑA 03",
+          "SAN JUAN DE LURIGANCHO 05",
+          "VENTANILLA"
+        ],
+        "CODCP_MED": [
+          "574332",
+          "115388",
+          "541658",
+          "523312",
+          "120190",
+          "132749",
+          "550652",
+          "128167"
+        ],
+        "CEN_POB": [
+          "LAS AMERICAS",
+          "CARABAYLLO",
+          "SAN LUIS",
+          "LIMA CERCADO",
+          "VITARTE",
+          "ANCON",
+          "SAN JUAN DE LURIGANCHO",
+          "PEDRO CUEVA"
+        ],
+        "NOMCPSIG": [
+          "LAS AMERICAS",
+          "CARABAYLLO",
+          "SAN LUIS",
+          "LIMA CERCADO",
+          "VITARTE",
+          "ANCON",
+          "SAN JUAN DE LURIGANCHO",
+          "VENTANILLA"
+        ],
+        "CODCP_LUGA": [
+          " ",
+          "557708",
+          "561075",
+          "563365",
+          "572199",
+          "567329",
+          "560845",
+          "573522"
+        ],
+        "NOMLUGAR_U": [
+          " ",
+          "LOS REYES",
+          "LA VINA",
+          "TUPAC AMARU",
+          "EL PINO",
+          "VILLA JARDIN",
+          "LAS MORAS",
+          "MARISCAL CASTILLA"
+        ],
+        "FUENTE_G": [
+          "INEI",
+          "MED-GPS",
+          "IMG_SATELITAL"
+        ],
+        "N_ALUM": [
+          0.0,
+          4.0,
+          14.0,
+          7.0,
+          154.0,
+          274.0,
+          279.0,
+          248.0
+        ],
+        "N_DOCENTES": [
+          0.0,
+          2.0,
+          7.0,
+          11.0,
+          14.0,
+          3.0,
+          4.0,
+          1.0
+        ],
+        "CLONG_IE_D": [
+          -76.90422,
+          -77.06116705,
+          -77.00518,
+          -76.99688,
+          -77.00426,
+          -76.99159,
+          -76.99343,
+          -77.0048
+        ],
+        "CLAT_IE_DE": [
+          -12.03583,
+          -11.84281599,
+          -12.07639,
+          -12.07506,
+          -12.07656,
+          -12.07265,
+          -12.07802,
+          -12.07878
+        ],
+        "FTECOORDEN": [
+          2,
+          1
+        ],
+        "NALT_LOCAL": [
+          391.0,
+          207.0,
+          173.0,
+          188.0,
+          171.0,
+          200.0,
+          191.0,
+          170.0
+        ],
+        "N_main_build": [
+          null
+        ],
+        "N_anc_build": [
+          null
+        ],
+        "Upgrading_": [
+          null
+        ],
+        "Budget_est": [
+          null
+        ],
+        "Link_to_re": [
+          null
+        ],
+        "Link_to_pr": [
+          null
+        ],
+        "Source": [
+          "SIGMED"
+        ]
+      }
+    },
+    {
+      "nombre": "Footprints",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 6,
+      "crs": "EPSG:32718",
+      "campos": {
+        "SDV": "datetime64[ms]",
+        "SDP": "object",
+        "SHAPE_Length": "float64",
+        "SHAPE_Area": "float64"
+      },
+      "bbox_origen": [
+        257019.35749999993,
+        8662162.7697,
+        313876.1886999998,
+        8709006.7211
+      ],
+      "bbox_en_crs_sar": [
+        257019.35749999993,
+        8662162.7697,
+        313876.1886999998,
+        8709006.7211
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 6,
+      "valores_ejemplo": {
+        "SDV": [
+          "2016-03-27 00:00:00+00:00",
+          "2016-03-20 00:00:00+00:00",
+          "2016-11-16 00:00:00+00:00",
+          "2017-03-21 00:00:00+00:00",
+          "2017-03-18 00:00:00+00:00"
+        ],
+        "SDP": [
+          "SPOT 7",
+          "WorldView-2"
+        ],
+        "SHAPE_Length": [
+          68350.53945086092,
+          170011.55487920847,
+          133802.6793950387,
+          109640.7922735672,
+          112724.44933943979,
+          48346.02384496051
+        ],
+        "SHAPE_Area": [
+          236988749.00625274,
+          1815019536.9180512,
+          1050019983.5028222,
+          697074164.9408138,
+          726382345.1604345,
+          122657389.32304733
+        ]
+      }
+    },
+    {
+      "nombre": "GADM27_countries",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 256,
+      "crs": "EPSG:4326",
+      "campos": {
+        "ISO": "object",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        -179.99999999999997,
+        -89.99999999999994,
+        180.0000000000001,
+        83.65833282500006
+      ],
+      "bbox_en_crs_sar": [
+        -12409342.73592479,
+        -8596372.616742704,
+        1209260.9188380875,
+        29995929.886041995
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "ISO": [
+          "ABW",
+          "AFG",
+          "AGO",
+          "AIA",
+          "ALA",
+          "ALB",
+          "AND",
+          "ARE"
+        ],
+        "Shape_Length": [
+          0.9636343329377558,
+          57.10465462352416,
+          73.5319459016118,
+          1.3183212099999082,
+          42.55644870955462,
+          14.03340548515646,
+          1.222116195389267,
+          44.83779900892565
+        ],
+        "Shape_Area": [
+          0.015130751842529355,
+          62.74958711834749,
+          103.83997430980078,
+          0.007115668615095231,
+          0.24377714293568756,
+          3.082172130801754,
+          0.049530975770737895,
+          6.936311248412807
+        ]
+      }
+    },
+    {
+      "nombre": "DamAssess_A",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 1073,
+      "crs": "EPSG:32718",
+      "campos": {
+        "FID_OPTICAL_FloodExtent_OBIA": "int32",
+        "ID": "float64",
+        "source": "object",
+        "FID_dissolvecodeLULC_2": "int32",
+        "LULC": "float64",
+        "AREA_m2": "float64",
+        "DAM": "int16",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        266193.49990000017,
+        8667727.75,
+        298216.63549999986,
+        8698586.1112
+      ],
+      "bbox_en_crs_sar": [
+        266193.49990000017,
+        8667727.75,
+        298216.63549999986,
+        8698586.1112
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "FID_OPTICAL_FloodExtent_OBIA": [
+          389,
+          394,
+          395
+        ],
+        "ID": [
+          0.0,
+          null
+        ],
+        "source": [
+          "river",
+          "maximun height"
+        ],
+        "FID_dissolvecodeLULC_2": [
+          6842,
+          8834,
+          9913,
+          12002,
+          14333,
+          15186,
+          15750,
+          31282
+        ],
+        "LULC": [
+          111.0,
+          112.0,
+          121.0,
+          133.0,
+          141.0,
+          211.0,
+          242.0,
+          324.0
+        ],
+        "AREA_m2": [
+          26637.16444573879,
+          5100.453959203955,
+          30982.652742350216,
+          33542.06244572818,
+          24875.531113812034,
+          18375.235627939313,
+          140878.85356490043,
+          14083.88619475093
+        ],
+        "DAM": [
+          3,
+          2,
+          1
+        ],
+        "Shape_Length": [
+          479.5617813656908,
+          31.624524948734546,
+          238.9868993080076,
+          587.1430172806803,
+          28.381958979251003,
+          252.08205945285718,
+          1845.5154396512858,
+          274.29779033262645
+        ],
+        "Shape_Area": [
+          695.6426825937141,
+          27.06425933220991,
+          283.4812988020526,
+          5201.028724291072,
+          11.84401590114431,
+          690.7499776397173,
+          11487.787817322636,
+          4060.9533368902735
+        ]
+      }
+    },
+    {
+      "nombre": "DamAssess_L",
+      "tipo_geometria": "MultiLineString",
+      "cantidad_entidades": 262,
+      "crs": "EPSG:32718",
+      "campos": {
+        "DAM_GRAD": "object",
+        "ASSET": "object",
+        "SHAPE_Length": "float64"
+      },
+      "bbox_origen": [
+        287174.9271,
+        8670388.6556,
+        298216.19859999977,
+        8676581.8032
+      ],
+      "bbox_en_crs_sar": [
+        287174.9271,
+        8670388.6556,
+        298216.19859999977,
+        8676581.8032
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "DAM_GRAD": [
+          "Partially Flooded",
+          "Totally Flooded",
+          "Not Flooded"
+        ],
+        "ASSET": [
+          "Road"
+        ],
+        "SHAPE_Length": [
+          65.76930678721126,
+          69.10117853742389,
+          41.6648460117612,
+          35.82779660377247,
+          1335.3431861498614,
+          9.189968173696716,
+          78.70814486159132,
+          238.55668189472877
+        ]
+      }
+    },
+    {
+      "nombre": "DamAssess_P",
+      "tipo_geometria": "Point",
+      "cantidad_entidades": 440,
+      "crs": "EPSG:32718",
+      "campos": {
+        "DAM_GRAD": "int16",
+        "ASSET": "int16"
+      },
+      "bbox_origen": [
+        267245.20940000005,
+        8668483.0006,
+        298153.6775000002,
+        8698171.7426
+      ],
+      "bbox_en_crs_sar": [
+        267245.20940000005,
+        8668483.0006,
+        298153.6775000002,
+        8698171.7426
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "DAM_GRAD": [
+          0,
+          1,
+          3,
+          2
+        ],
+        "ASSET": [
+          null,
+          5.0,
+          1.0,
+          10.0,
+          3.0,
+          11.0
+        ]
+      }
+    },
+    {
+      "nombre": "Potential_Maximum_flood",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 13,
+      "crs": "EPSG:32718",
+      "campos": {
+        "ID": "float64",
+        "source": "object",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        266193.49990000017,
+        8667727.75,
+        298216.63549999986,
+        8698586.1112
+      ],
+      "bbox_en_crs_sar": [
+        266193.49990000017,
+        8667727.75,
+        298216.63549999986,
+        8698586.1112
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 13,
+      "valores_ejemplo": {
+        "ID": [
+          0.0,
+          null
+        ],
+        "source": [
+          "river",
+          "maximun height"
+        ],
+        "Shape_Length": [
+          109595.57415473404,
+          78792.41637052564,
+          41247.40061718949,
+          1052.2250513801262,
+          415.9791017511906,
+          14274.474134618147,
+          626.8904980585559,
+          1065.2618841754222
+        ],
+        "Shape_Area": [
+          3156244.543073243,
+          3186286.1158756223,
+          6381769.526782308,
+          44948.378955926324,
+          9977.899339021198,
+          787247.7613280221,
+          971.2946921767673,
+          1057.3045376401178
+        ]
+      }
+    },
+    {
+      "nombre": "Riverbank",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 11,
+      "crs": "EPSG:32718",
+      "campos": {
+        "source": "object",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        269757.04449999984,
+        8670383.236,
+        298216.63549999986,
+        8688163.6837
+      ],
+      "bbox_en_crs_sar": [
+        269757.04449999984,
+        8670383.236,
+        298216.63549999986,
+        8688163.6837
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 11,
+      "valores_ejemplo": {
+        "source": [
+          "maximun height"
+        ],
+        "Shape_Length": [
+          41247.40061718949,
+          1052.2250513801262,
+          415.9791017511906,
+          14274.474134618147,
+          626.8904980585559,
+          1065.2618841754222,
+          669.1454518389596,
+          633.2703261092522
+        ],
+        "Shape_Area": [
+          6381769.526782308,
+          44948.378955926324,
+          9977.899339021198,
+          787247.7613280221,
+          971.2946921767673,
+          1057.3045376401178,
+          745.2069684256345,
+          709.2556898883307
+        ]
+      }
+    },
+    {
+      "nombre": "SAR_LandslideErosionPotential",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 2678,
+      "crs": "EPSG:32718",
+      "campos": {
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        261008.07519999985,
+        8663770.9999,
+        312482.97759999987,
+        8708001.0
+      ],
+      "bbox_en_crs_sar": [
+        261008.07519999985,
+        8663770.9999,
+        312482.97759999987,
+        8708001.0
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "Shape_Length": [
+          326.50650354567045,
+          758.758850390162,
+          317.73940704647396,
+          754.0541641615957,
+          330.4339533241401,
+          292.93181540226885,
+          688.4185379789403,
+          320.70076842588344
+        ],
+        "Shape_Area": [
+          5236.059070194728,
+          16425.537130178942,
+          6223.739363587944,
+          17901.294275976747,
+          6432.55951731059,
+          5249.491411142597,
+          13178.474012158642,
+          6041.915813582484
+        ]
+      }
+    },
+    {
+      "nombre": "grid200",
+      "tipo_geometria": "MultiPolygon",
+      "cantidad_entidades": 53376,
+      "crs": "EPSG:32718",
+      "campos": {
+        "SUMCHANGE": "int32",
+        "SUM1703VV": "int16",
+        "SUM1803VV": "int16",
+        "SUM1703VH": "int16",
+        "FREQCHANGE": "int16",
+        "STREAMPROX": "int16",
+        "Shape_Length": "float64",
+        "Shape_Area": "float64"
+      },
+      "bbox_origen": [
+        260282.7913620621,
+        8663198.441643968,
+        312682.79136206117,
+        8707798.441643972
+      ],
+      "bbox_en_crs_sar": [
+        260282.7913620621,
+        8663198.441643968,
+        312682.79136206117,
+        8707798.441643972
+      ],
+      "bbox_intersecta_sar": true,
+      "entidades_muestreadas": 200,
+      "valores_ejemplo": {
+        "SUMCHANGE": [
+          0
+        ],
+        "SUM1703VV": [
+          0
+        ],
+        "SUM1803VV": [
+          0
+        ],
+        "SUM1703VH": [
+          0
+        ],
+        "FREQCHANGE": [
+          0
+        ],
+        "STREAMPROX": [
+          null,
+          1.0
+        ],
+        "Shape_Length": [
+          800.0000000055879,
+          800.0,
+          800.0000000037253,
+          800.0000000018626
+        ],
+        "Shape_Area": [
+          40000.00000055879,
+          40000.0,
+          40000.00000037253,
+          40000.000000186265
+        ]
+      }
+    }
+  ]
+}

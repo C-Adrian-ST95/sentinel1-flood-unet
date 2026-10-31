@@ -1,0 +1,29 @@
+{
+  "escena_sar": "data\\processed\\lima_2017\\final\\lima_20170317_VV_VH_dB.tif",
+  "crs": "EPSG:32718",
+  "ancho": 3404,
+  "alto": 3287,
+  "pixeles_sar_validos": 9960850,
+  "layer_potencial": "Potential_Maximum_flood",
+  "n_poligonos_potenciales": 13,
+  "source_potencial": {
+    "maximun height": 11,
+    "river": 2
+  },
+  "pixeles_potencial_sobre_sar_valido": 132711,
+  "footprints_todos": 6,
+  "footprints_18_21_marzo_2017": 3,
+  "fechas_footprints": [
+    "2016-03-27",
+    "2016-03-20",
+    "2016-11-16",
+    "2017-03-21",
+    "2017-03-18"
+  ],
+  "pixeles_sar_validos_bajo_footprints_postevento": 9379127,
+  "pixeles_potencial_bajo_footprints_postevento": 132699,
+  "pixeles_en_footprints_fuera_potencial_sin_etiqueta_negativa_verificada": 9246428,
+  "aclaracion": "NO es evaluación IoU/F1. Potential_Maximum_flood no equivale a agua observada; los footprints ópticos no demuestran por sí mismos una clasificación negativa exhaustiva. Fuera del polígono potencial = desconocido para la clase agua.",
+  "pixeles_fuente_maximun height": 72347,
+  "pixeles_fuente_river": 60364
+}
