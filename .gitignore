@@ -24,16 +24,29 @@
 !/outputs/**/.gitkeep
 !/outputs/README.md
 
-# Publicar solo JSON/CSV de las ejecuciones utilizadas en el informe.
-# Las figuras finales y el PDF se conservan en reports/, no se ignoran.
+# ==========================================================
+# RESULTADOS SELECCIONADOS: JSON, CSV e imagenes PNG
+# ==========================================================
+
+# EXPERIMENTOS GOLD
 !/outputs/experimentos_gold/run_20261029_013146_547224/**/*.json
 !/outputs/experimentos_gold/run_20261029_013146_547224/**/*.csv
+!/outputs/experimentos_gold/run_20261029_013146_547224/**/*.png
+
+# EXPERIMENTOS WEAK
 !/outputs/experimentos_weak/run_20261029_035455_467350/**/*.json
 !/outputs/experimentos_weak/run_20261029_035455_467350/**/*.csv
+!/outputs/experimentos_weak/run_20261029_035455_467350/**/*.png
+
+# LIMA 2017
 !/outputs/lima_2017/run_20261031_170636_860270/**/*.json
 !/outputs/lima_2017/run_20261031_170636_860270/**/*.csv
+!/outputs/lima_2017/run_20261031_170636_860270/**/*.png
+
+# PIPELINE
 !/outputs/pipeline/run_20261031_170636_860270/**/*.json
 !/outputs/pipeline/run_20261031_170636_860270/**/*.csv
+!/outputs/pipeline/run_20261031_170636_860270/**/*.png
 
 # MODELOS Y RASTERS: excluir aunque se copien fuera de data/outputs.
 *.pth
