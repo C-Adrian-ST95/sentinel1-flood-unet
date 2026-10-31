@@ -42,7 +42,7 @@
 *.onnx
 *.tif
 *.tiff
-*.img
+
 *.hdr
 *.dim
 *.data/
